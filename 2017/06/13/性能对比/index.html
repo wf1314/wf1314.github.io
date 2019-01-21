@@ -51,7 +51,7 @@
 <meta property="og:image" content="http://i2.bvimg.com/675051/11fa89e1e8227588.png">
 <meta property="og:image" content="http://i2.bvimg.com/675051/0aea7f4de19cc5bd.png">
 <meta property="og:image" content="http://i2.bvimg.com/675051/bac5d957d31bac32.png">
-<meta property="og:updated_time" content="2019-01-21T10:00:16.830Z">
+<meta property="og:updated_time" content="2019-01-21T10:01:47.405Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python3 线程 进程 异步io性能对比">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;目前网络上主流爬虫一般在使用requests、多线程、多进程,却很少有人使用协程异步这种 速度快占用资源少的爬取方式,当然爬虫的关键往往并不在于爬取速度的快慢,每种方式也有它各 自的适用场景,这里我们仅对网络io密集型进行简要的性能对比。 1.多线程爬虫&amp;emsp;&amp;emsp;众所周知由于python中一个线程需要执行任务，必须获取GIL,但是，在I/O阻塞的时候，解 释器">
@@ -413,8 +413,8 @@
 <p> 时能达到5秒左右是测试前完全没有想到的,甚至在得到结果时一度以为aiohttp有缓存功能,但是当我</p>
 <p> 将url更改为某网站翻页url,每次请求不同url时仍能保持该速度!!!多进程在执行时cpu完全跑满,导致本</p>
 <p> 机操作卡顿,所以无论就速度而言还是占用资源来讲都不建议使用多进程来编写爬虫,线程任务选择了</p>
-<p> 500线程每个线程请求两次速度上还是与异步有一定差距,所以如果要编写对爬取速度要求较高的代码</p>
-<p> 时可以优先考虑aiohttp与asyncio的异步编程!</p>
+<p> 500线程每个线程请求两次速度上还是与异步有一定差距,所以如果要编写对爬取速度要求较高的代</p>
+<p> 码时可以优先考虑aiohttp与asyncio的异步编程!</p>
 </span>
       
     </div>
