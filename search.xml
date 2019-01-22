@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[3proxy代理服务器使用]]></title>
+    <url>%2Fpost%2F942b36a3.html</url>
+    <content type="text"><![CDATA[3proxy 简介3proxy是一个代理服务器,功能十分强大,可以同时开启http、socks等各种代理,支持 windows 和 linux 平台，安装和配置都很简单,使用非常方便. 配置安装3proxyLINUX 系统安装步骤如下：12345678# 通过 git 下载最新版 3proxy 源码git clone https://github.com/z3APA3A/3proxy.git# 切换到 3proxy 目录cd 3proxy# 编译 3proxy, 如果你的系统没有 gcc，你需求先安装 gccmake -f Makefile.Linux# 安装 3proxymake -f Makefile.Linux install 编辑配置文件3proxy.cfg,如果没有该文件可以自行创建 1234567891011121314151617# dns服务器第一个解析失败会使用第二个nserver 223.5.5.5 nserver 114.114.114.114# 域名解析最大的缓存条目 默认即可，也可以注释掉nscache 65536# 各项连接选项的超时时间# timeouts &lt;BYTE_SHORT&gt; &lt;BYTE_LONG&gt; &lt;STRING_SHORT&gt; &lt;STRING_LONG&gt; &lt;CONNECTION_SHORT&gt; &lt;CONNECTION_LONG&gt; &lt;DNS&gt; &lt;CHAIN&gt;timeouts 1 5 30 60 180 1800 15 60# 用户名密码 如果auth为strong情况需要验证users zds:CL:a95j1JB3Txvq71D20G88oi# auto none 无需验证auth strong # 开启验证flush# 开启一个HTTP代理 端口是9000proxy -a -i0.0.0.0 -p9000# 开启一个SOCKS代理 端口是9001socks -a -i0.0.0.0 -p9001 后台执行13proxy 3proxy.cfg&amp; windows 系统安装步骤如下:首先点击下载应用程序安装好之后执行命令:1234# 3proxy.cfg路径更改为自己的3proxy.cfg3proxy --install c:\service\3proxy\bin\3proxy.cfgnet start 3proxy # 启动服务 可以通过以下代码来检查是否可以正常使用:12345678910111213import requestsfrom requests.auth import HTTPProxyAuth# 验证auth = HTTPProxyAuth('zds', 'a95j1JB3Txvq71D20G88oi') # cfg配置文件里设置的账号密码url = 'http://ip.6655.com/ip.aspx'proxies = &#123; 'http': 'http://**.**.**.**:9000' # 服务器外网ip&#125;r = requests.get(url, proxies=proxies, auth=auth)print(r.text) 如果正确输出你的服务器ip表示开启成功!]]></content>
+      <categories>
+        <category>代理</category>
+        <category>服务器</category>
+      </categories>
+      <tags>
+        <tag>代理</tag>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python3 线程 进程 异步io性能对比]]></title>
+    <url>%2Fpost%2F51704.html</url>
+    <content type="text"><![CDATA[&emsp;&emsp;目前网络上主流爬虫一般在使用requests、多线程、多进程,却很少有人使用协程异步这种 速度快占用资源少的爬取方式,当然爬虫的关键往往并不在于爬取速度的快慢,每种方式也有它各 自的适用场景,这里我们仅对网络io密集型进行简要的性能对比。 1.多线程爬虫&emsp;&emsp;众所周知由于python中一个线程需要执行任务，必须获取GIL,但是，在I/O阻塞的时候，解 释器会释放GIL。所以GIL在io密集型任务里仍有优异的性能表现,这里我们均以请求 wangfan.me 1000次为例进行测试,代码如下: 12345678910111213141516171819202122232425262728import requestsfrom threading import Threadimport timeurl = 'http://wangfan.me'headers = &#123; 'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'&#125;def request_url(): for _ in range(2): r = requests.get(url, headers=headers) print(r.status_code)def main(): s = time.time() threads = [] for _ in range(500): threads.append(Thread(target=request_url)) for t in threads: t.start() for t in threads: t.join() print('执行总用时 &#123;&#125;秒'.format(time.time() - s))if __name__ == '__main__': main() 程序执行结果: 用时约12.6s! 2.多进程爬虫&emsp;&emsp;由于进程之间的通信有操作系统传递，导致通讯效率低，切换开销大。所以一般密集CPU 任务，需要充分使用多核CPU资源（服务器，大量的并行计算）的时候用多进程。在编写爬虫 时不建议单独使用多进程来编写,代码如下: 12345678910111213141516171819202122232425262728import requestsfrom multiprocessing import Processimport timeurl = 'http://wangfan.me'headers = &#123; 'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'&#125;def request_url(): for _ in range(2): r = requests.get(url, headers=headers) print(r.status_code)def main(): s = time.time() threads = [] for _ in range(500): threads.append(Process(target=request_url)) for t in threads: t.start() for t in threads: t.join() print('执行总用时 &#123;&#125;秒'.format(time.time() - s))if __name__ == '__main__': main() 程序执行结果: 用时约17.7s! 3.异步爬虫&emsp;&emsp;async 与 await， 这是在 Python3.5 中引入的新语法，用于增强 Python 协程方面的支持。 可以简单的认为是asyncio.coroutine与yield from的简化版。随着新语法到来的还有async with EXPR as VAR这个异步上下文管理器（取代with (yield from EXPR) as VAR)与async for TARGET in ITER(取代for TARGET in (yield from ITER))这个异步迭代器。不同于yield from，await只适用 于 CO_COROUTINE标记的原生协程，即，使用async def语法定义的对象。由于requests并不支 持异步请求,所以请求库我们选择使用aiohttp(pip install aiohttp),参考代码如下: 1234567891011121314151617181920import timeimport asyncioimport aiohttpurl = 'http://wangfan.me'async def _get_page(): """ 获取并返回网页内容 """ async with aiohttp.request('GET', url) as session: async with session as s: print(s.status)if __name__ == '__main__': s = time.time() a = [_get_page() for _ in range(20)] loop = asyncio.get_event_loop() loop.run_until_complete((asyncio.gather(*a))) print('执行总用时 &#123;&#125;'.format(time.time() - s)) 程序执行结果: 用时约7.7秒! 测试结果 &emsp;&emsp;根据测试结果不难看出,关于io密集型任务,异步&gt;多线程&gt;多进程,由于请求时可能受网络状况的 影响,所以运行时间的结果,是经过多次运行选取了较为合理的中位值,这里异步爬虫仅用时7.7秒,最快 时能达到5秒左右是测试前完全没有想到的,甚至在得到结果时一度以为aiohttp有缓存功能,但是当我 将url更改为某网站翻页url,每次请求不同url时仍能保持该速度!!!多进程在执行时cpu完全跑满,导致本 机操作卡顿,所以无论就速度而言还是占用资源来讲都不建议使用多进程来编写爬虫,线程任务选择了 500线程每个线程请求两次速度上还是与异步有一定差距,所以如果要编写对爬取速度要求较高的代 码时可以优先考虑aiohttp与asyncio的异步编程!]]></content>
+      <categories>
+        <category>python</category>
+        <category>爬虫</category>
+      </categories>
+      <tags>
+        <tag>多线程</tag>
+        <tag>多进程</tag>
+        <tag>协程</tag>
+        <tag>性能优化</tag>
+        <tag>异步</tag>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[绑定gihub page到Godaddy域名]]></title>
+    <url>%2Fpost%2F55704.html</url>
+    <content type="text"><![CDATA[一、首先在Godaddy官网购买域名二、使用dnspod配置DNS首先，进入DNSPOD官方网站，用你的账号登录。登录后，进入DNSPOD控制面板，选择“我的域名”模块。在“我的域名”页面，有一个【添加域名】按钮。如图片一所示。点击该按钮，这时比如我要解析hgaga.com ，直接输入你想解析的域名进去。（注意，输入域名时，不要带www）。如图片所示。点击【确定】，这样就添加了一个域名到DNSPOD了。添加好之后，需要为域名设置各种参数，如A记录，NS地址等。点击刚才添加的这个域名，进入域名设置界面。在这里，你可以看到DNSPOD已经为你提供了2个NS（Name Server）地址，你需要把这2个地址，在GoDaddy后台控制面板中进行设置如图片所示更改完域名服务器后回到dnspod的管理界面,添加一下两条记录 主机记录 记录类型 记录值 www CNAME username.github.io @ A 185.199.111.153 @ A 185.199.110.153 这样别人用www和不用www都能访问你的网站（其实www的方式，会先解析成http://xxxx.github.io， 然后根据CNAME再变成http://xxx.com， 即中间是经过一次转换的）。 三、配置Github在我们的Hexo项目的sources目录下新建个CNAME文件，里面写上我们的域名。之后重新部署项目: hexo g hexo d 如果你是用 hexo 框架搭建博客并部署到 Github Pages 上: 每次hexo g hexo d 后会把你的博客所在目录下 public 文件夹里的东西都推到 Github Pages 仓库上，并且把 CNAME 文件覆盖掉，解决这个问题可以直接把 CNAME 文件添加到 source 文件夹里，这样每次推的时候就不用担心仓库里的 CNAME 文件被覆盖掉了。 开启HTTPS点击setting填写custom domain并勾选enforce https 全部设置完成后,需要等待10分钟左右域名才会生效.]]></content>
+      <categories>
+        <category>技术相关</category>
+      </categories>
+      <tags>
+        <tag>域名绑定</tag>
+        <tag>godaddy</tag>
+      </tags>
+  </entry>
+</search>
