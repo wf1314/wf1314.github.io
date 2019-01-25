@@ -1,0 +1,1010 @@
+
+<!doctype html>
+<html class="theme-next use-motion theme-next-mala">
+<head><meta name="generator" content="Hexo 3.8.0">
+  
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5">
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1">
+
+
+    <meta name="description" content="如果有一天，你不再寻找爱情，只是去爱；你不再渴望成功，只是去做；你不再追逐成长，只是去修；一切才真正开始">
+
+
+
+  <meta name="keywords" content="进程管理,">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="wangfan's blog" type="application/atom+xml">
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/images/favicon.ico?v=0.4.5.1">
+
+
+<meta name="description" content="使用 supervisor 管理进程Supervisor (http://supervisord.org) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启">
+<meta name="keywords" content="进程管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="supervisor进程管理使用教程">
+<meta property="og:url" content="http://yoursite.com/post/86c9ee8.html">
+<meta property="og:site_name" content="wangfan&#39;s blog">
+<meta property="og:description" content="使用 supervisor 管理进程Supervisor (http://supervisord.org) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://i1.bvimg.com/675051/d5285f82fd3f7e20.png">
+<meta property="og:updated_time" content="2019-01-25T08:31:26.824Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="supervisor进程管理使用教程">
+<meta name="twitter:description" content="使用 supervisor 管理进程Supervisor (http://supervisord.org) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启">
+<meta name="twitter:image" content="http://i1.bvimg.com/675051/d5285f82fd3f7e20.png">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mala',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> supervisor进程管理使用教程 | wangfan's blog </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Home</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br>
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br>
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br>
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br>
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br>
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            <i class="menu-item-icon icon-next-commonweal"></i> <br>
+            公益404
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    
+      
+
+      
+        <style type="text/css">
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        background: #555 no-repeat;
+        cursor: move;
+    }
+
+    .assist-btn {
+        position: fixed;
+        top: 50％;
+        left: 10px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        border-radius: 50px;
+        outline: none;
+        border: none;
+        color: #87daff;
+    }
+
+</style>
+
+<script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+<script type="text/javascript">
+    // 浮动圆点展开与收缩
+    /*
+    $(function () {
+        var assist_box = $('.assist-box');
+        $('#assist_btn').hover(function () {
+            assist_box.stop().show(300);
+        }, function () {
+            assist_box.stop().hide(150);
+        })
+    });
+    */  
+    //浮动圆点拖动
+    $(function () {
+        var box = document.getElementById('assist_btn');
+        box.onmousedown = function (event) {
+            var e = event || window.event,
+                t = e.target || e.srcElement,
+                // 鼠标按下时的坐标x1,y1
+                x1 = e.clientX,
+                y1 = e.clientY,
+                //鼠标按下时的左右偏移量
+                dragLeft = this.offsetLeft,
+                dragTop = this.offsetTop;
+
+            document.onmousemove = function (event) {
+                var e = event || window.event,
+                    t = e.target || e.srcElement,
+                    // 鼠标移动时的动态坐标
+                    x2 = e.clientX,
+                    y2 = e.clientY,
+                    // 鼠标移动时的坐标的变化量
+                    x = x2 - x1,
+                    y = y2 - y1;
+                box.style.left = (dragLeft + x) + 'px';
+                box.style.top = (dragTop + y) + 'px';
+            }
+
+            document.onmouseup = function () {
+                this.onmousemove = null;
+            }
+        }
+    });
+
+/*
+    $whitesmoke   = #f5f5f5
+    $gainsboro    = #eee
+    $gray-lighter = #ddd
+    $grey-light   = #ccc
+    $grey         = #bbb
+    $grey-dark    = #999
+    $grey-dim     = #666
+    $black-light  = #555
+    $black-deep   = #222
+    $red          = #ff2a2a
+    $blue-bright  = #87daff
+    $blue         = #0684bd
+    $blue-deep    = #262a30
+*/
+    // white theme
+    var body = {color: "#555", background: "white"};
+    var a_tag = {color: "#222"};
+    var header = { background: "#f5f5f5"};
+    var logo_line_i = {background: "#222"};
+    // var post_code = {background: "#eee", color: "#222"};
+
+    function switch_theme() {
+        $("body").css(body);
+        $("a:not('.links-of-author-item a, .site-state-item a, .site-state-posts a, .feed-link a, .motion-element a, .post-tags a, .show-commit-cls a, #donate_board a')").css(a_tag);
+        $(".header, .footer").css(header);
+        $(".logo-line-before i, .logo-line-after i").css(logo_line_i);
+        //$(".post code").css(post_code);
+        $("#idhyt-surprise-ball #idhyt-surprise-ball-animation .drag").css(a_tag);
+        $(".post-title-link, .posts-expand .post-meta, .post-comments-count, .disqus-comment-count, .post-category a, .post-nav-next a, .post-nav-item a").css(a_tag);
+        
+        // $("code").css({color: '#c5c8c6', background: '#1d1f21'});
+        $("#assist_btn").hide(1500);
+    }
+
+    $(function () {
+        $("#assist_btn").dblclick(function() {
+            switch_theme();
+        });
+    });
+
+</script>
+
+<div>
+
+    <button class="assist-btn circle" id="assist_btn" title="双击切换">
+        亮
+    </button>
+
+</div>
+
+
+
+
+
+
+
+
+
+      
+
+    
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              supervisor进程管理使用教程
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2018-06-11T15:54:03+08:00" content="2018-06-11">
+            2018-06-11
+          </time>
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope="" itemtype="https://schema.org/Thing">
+                <a href="/categories/技术相关/" itemprop="url" rel="index">
+                  <span itemprop="name">技术相关</span>
+                </a>
+              </span>
+
+              
+              
+                ， 
+              
+
+            
+              <span itemprop="about" itemscope="" itemtype="https://schema.org/Thing">
+                <a href="/categories/技术相关/python/" itemprop="url" rel="index">
+                  <span itemprop="name">python</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/post/86c9ee8.html#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/86c9ee8.html" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="使用-supervisor-管理进程"><a href="#使用-supervisor-管理进程" class="headerlink" title="使用 supervisor 管理进程"></a>使用 supervisor 管理进程</h2><p>Supervisor (<a href="http://supervisord.org" target="_blank" rel="noopener">http://supervisord.org</a>) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启动。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>Supervisor 可以运行在 Linux、Mac OS X 上。如前所述，supervisor 是 Python 编写的，所以安装起来也很方便，可以直接用 pip:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install supervisor</span><br></pre></td></tr></table></figure></p>
+<h3 id="supervisord-配置"><a href="#supervisord-配置" class="headerlink" title="supervisord 配置"></a>supervisord 配置</h3><p>Supervisor 相当强大，提供了很丰富的功能，不过我们可能只需要用到其中一小部分。安装完成之后，可以编写配置文件，来满足自己的需求。为了方便，我们把配置分成两部分：supervisord（supervisor 是一个 C/S 模型的程序，这是 server 端，对应的有 client 端：supervisorctl）和应用程序（即我们要管理的程序）。</p>
+<p>首先来看 supervisord 的配置文件。安装完 supervisor 之后，可以运行echo_supervisord_conf 命令输出默认的配置项，也可以重定向到一个配置文件里：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo_supervisord_conf &gt; /etc/supervisord.conf</span><br></pre></td></tr></table></figure></p>
+<p>去除里面大部分注释和“不相关”的部分，我们可以先看这些配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">[unix_http_server]</span><br><span class="line">file=/tmp/supervisor.sock   ; UNIX socket 文件，supervisorctl 会使用</span><br><span class="line">;chmod=0700                 ; socket 文件的 mode，默认是 0700</span><br><span class="line">;chown=nobody:nogroup       ; socket 文件的 owner，格式： uid:gid</span><br><span class="line"></span><br><span class="line">;[inet_http_server]         ; HTTP 服务器，提供 web 管理界面</span><br><span class="line">;port=127.0.0.1:9001        ; Web 管理后台运行的 IP 和端口，如果开放到公网，需要注意安全性</span><br><span class="line">;username=user              ; 登录管理后台的用户名</span><br><span class="line">;password=123               ; 登录管理后台的密码</span><br><span class="line"></span><br><span class="line">[supervisord]</span><br><span class="line">logfile=/tmp/supervisord.log ; 日志文件，默认是 $CWD/supervisord.log</span><br><span class="line">logfile_maxbytes=50MB        ; 日志文件大小，超出会 rotate，默认 50MB</span><br><span class="line">logfile_backups=10           ; 日志文件保留备份数量默认 10</span><br><span class="line">loglevel=info                ; 日志级别，默认 info，其它: debug,warn,trace</span><br><span class="line">pidfile=/tmp/supervisord.pid ; pid 文件</span><br><span class="line">nodaemon=false               ; 是否在前台启动，默认是 false，即以 daemon 的方式启动</span><br><span class="line">minfds=1024                  ; 可以打开的文件描述符的最小值，默认 1024</span><br><span class="line">minprocs=200                 ; 可以打开的进程数的最小值，默认 200</span><br><span class="line"></span><br><span class="line">; the below section must remain in the config file for RPC</span><br><span class="line">; (supervisorctl/web interface) to work, additional interfaces may be</span><br><span class="line">; added by defining them in separate rpcinterface: sections</span><br><span class="line">[rpcinterface:supervisor]</span><br><span class="line">supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface</span><br><span class="line"></span><br><span class="line">[supervisorctl]</span><br><span class="line">serverurl=unix:///tmp/supervisor.sock ; 通过 UNIX socket 连接 supervisord，路径与 unix_http_server 部分的 file 一致</span><br><span class="line">;serverurl=http://127.0.0.1:9001 ; 通过 HTTP 的方式连接 supervisord</span><br><span class="line"></span><br><span class="line">; 包含其他的配置文件</span><br><span class="line">[include]</span><br><span class="line">files = relative/directory/*.ini    ; 可以是 *.conf 或 *.ini</span><br><span class="line">我们把上面这部分配置保存到 /etc/supervisord.conf（或其他任意有权限访问的文件），然后启动 supervisord（通过 -c 选项指定配置文件路径，如果不指定会按照这个顺序查找配置文件：$CWD/supervisord.conf, $CWD/etc/supervisord.conf, /etc/supervisord.conf）：</span><br></pre></td></tr></table></figure></p>
+<p>我们把上面这部分配置保存到 /etc/supervisord.conf（或其他任意有权限访问的文件），然后启动 supervisord（通过 -c 选项指定配置文件路径，如果不指定会按照这个顺序查找配置文件：$CWD/supervisord.conf, $CWD/etc/supervisord.conf, /etc/supervisord.conf）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supervisord -c /etc/supervisord.conf</span><br></pre></td></tr></table></figure></p>
+<p>查看 supervisord 是否在运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep supervisord</span><br></pre></td></tr></table></figure></p>
+<h3 id="program-配置"><a href="#program-配置" class="headerlink" title="program 配置"></a>program 配置</h3><p>上面我们已经把 supervisrod 运行起来了，现在可以添加我们要管理的进程的配置文件。这些配置可以都写到 supervisord.conf 文件里，如果应用程序很多，最好通过 include 的方式把不同的程序（组）写到不同的配置文件里。</p>
+<p>为了举例，我们新建一个目录 /etc/supervisor/ 用于存放这些配置文件，相应的，把 /etc/supervisord.conf 里 include 部分的的配置修改一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[include]</span><br><span class="line">files = /etc/supervisor/*.conf</span><br></pre></td></tr></table></figure></p>
+<p>假设有个用 Flask 开发的用户系统 usercenter, 生产环境使用 gunicorn 运行。项目代码位于 /home/leon/projects/usercenter，WSGI 对象位于 wsgi.py。在命令行启动的方式是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /home/leon/projects/usercenter</span><br><span class="line">gunicorn -w 8 -b 0.0.0.0:17510 wsgi:app</span><br></pre></td></tr></table></figure></p>
+<p>对应的配置文件可能是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[program:usercenter]</span><br><span class="line">directory = /home/leon/projects/usercenter ; 程序的启动目录</span><br><span class="line">command = gunicorn -w 8 -b 0.0.0.0:17510 wsgi:app  ; 启动命令</span><br><span class="line">autostart = true     ; 在 supervisord 启动的时候也自动启动</span><br><span class="line">startsecs = 5        ; 启动 5 秒后没有异常退出，就当作已经正常启动了</span><br><span class="line">autorestart = true   ; 程序异常退出后自动重启</span><br><span class="line">startretries = 3     ; 启动失败自动重试次数，默认是 3</span><br><span class="line">user = leon          ; 用哪个用户启动</span><br><span class="line">redirect_stderr = true  ; 把 stderr 重定向到 stdout，默认 false</span><br><span class="line">stdout_logfile_maxbytes = 20MB  ; stdout 日志文件大小，默认 50MB</span><br><span class="line">stdout_logfile_backups = 20     ; stdout 日志文件备份数</span><br><span class="line">; stdout 日志文件，需要注意当指定目录不存在时无法正常启动，所以需要手动创建目录（supervisord 会自动创建日志文件）</span><br><span class="line">stdout_logfile = /data/logs/usercenter_stdout.log</span><br></pre></td></tr></table></figure></p>
+<p>其中 [program:usercenter] 中的 usercenter 是应用程序的唯一标识，不能重复。对该程序的所有操作（start, restart 等）都通过名字来实现。</p>
+<h3 id="Tips-1-Python-环境"><a href="#Tips-1-Python-环境" class="headerlink" title="Tips 1: Python 环境"></a>Tips 1: Python 环境</h3><p>有两种方式指定程序使用的 Python 环境：</p>
+<ul>
+<li><p>command 使用绝对路径。假设使用 pyenv 来管理 Python 环境，上面例子中的 gunicorn 路径可以替换为/home/leon/.pyenv/versions/usercenter/bin/gunicorn. 这种方式一目了然，推荐。</p>
+</li>
+<li><p>通过 environment 配置 PYTHONPATH. environment=PYTHONPATH=$PYTHONPATH:/home/leon/.pyenv/versions/usercenter/bin/. environment 这个配置项非常有用，可以用来给程序传入环境变量。</p>
+</li>
+</ul>
+<h3 id="Tips-2-后台进程"><a href="#Tips-2-后台进程" class="headerlink" title="Tips 2: 后台进程"></a>Tips 2: 后台进程</h3><p>Supervisor 只能管理在前台运行的程序，所以如果应用程序有后台运行的选项，需要关闭。</p>
+<h3 id="Tips-3-子进程"><a href="#Tips-3-子进程" class="headerlink" title="Tips 3: 子进程"></a>Tips 3: 子进程</h3><p>有时候用 Supervisor 托管的程序还会有子进程（如 Tornado），如果只杀死主进程，子进程就可能变成孤儿进程。通过这两项配置来确保所有子进程都能正确停止：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stopasgroup=true</span><br><span class="line">killasgroup=true</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用-supervisorctl"><a href="#使用-supervisorctl" class="headerlink" title="使用 supervisorctl"></a>使用 supervisorctl</h3><p>Supervisorctl 是 supervisord 的一个命令行客户端工具，启动时需要指定与 supervisord 使用同一份配置文件，否则与 supervisord 一样按照顺序查找配置文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">supervisorctl -c /etc/supervisord.conf</span><br></pre></td></tr></table></figure></p>
+<p>上面这个命令会进入 supervisorctl 的 shell 界面，然后可以执行不同的命令了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; status    # 查看程序状态</span><br><span class="line">&gt; stop usercenter   # 关闭 usercenter 程序</span><br><span class="line">&gt; start usercenter  # 启动 usercenter 程序</span><br><span class="line">&gt; restart usercenter    # 重启 usercenter 程序</span><br><span class="line">&gt; reread    ＃ 读取有更新（增加）的配置文件，不会启动新添加的程序</span><br><span class="line">&gt; update    ＃ 重启配置文件修改过的程序</span><br></pre></td></tr></table></figure></p>
+<p>上面这些命令都有相应的输出，除了进入 supervisorctl 的 shell 界面，也可以直接在 bash 终端运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ supervisorctl status</span><br><span class="line">$ supervisorctl stop usercenter</span><br><span class="line">$ supervisorctl start usercenter</span><br><span class="line">$ supervisorctl restart usercenter</span><br><span class="line">$ supervisorctl reread</span><br><span class="line">$ supervisorctl update</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用web可视化管理"><a href="#使用web可视化管理" class="headerlink" title="使用web可视化管理"></a>使用web可视化管理</h3><p>除了 supervisorctl 之外，还可以配置 supervisrod 启动 web 管理界面，这个 web 后台使用 Basic Auth 的方式进行身份认证。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[inet_http_server]         ; HTTP 服务器，提供 web 管理界面</span><br><span class="line">port=0.0.0.0:9001        ; Web 管理后台运行的 IP 和端口，如果开放到公网，需要注意安全性</span><br><span class="line">username=user              ; 登录管理后台的用户名</span><br><span class="line">password=123               ; 登录管理后台的密码</span><br></pre></td></tr></table></figure></p>
+<p>更改主配置文件的[inet_http_server]后重新运行,通过web端访问9001端口输入账号密码后会进入如下界面:<br><img src="http://i1.bvimg.com/675051/d5285f82fd3f7e20.png" alt="Markdown"><br>可通过此界面对进程进行终止重启等操作</p>
+<h3 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h3><p>当你要管理的子进程非常多时，Supervisor允许你将子进程分组，也就是多个子进程可以在同一组内统一管理。你只需要配置”[group:thegroupname]”块就行了。</p>
+<p>我们可以试下，配置一个”[program:hello]”子程序，和”[program:world]”,然后加上”[group:xxx]”配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[program:hello]</span><br><span class="line">command=python hello.py</span><br><span class="line"></span><br><span class="line">[program:world]</span><br><span class="line">command=python world.py</span><br><span class="line"></span><br><span class="line">[group:helloworld]</span><br><span class="line">programs=hello,world</span><br></pre></td></tr></table></figure></p>
+<p>现在我们将子进程”hello”和”world”都配置在进程组”helloworld”中，启动supervisord，让我们在supervisorctl客户端下试一试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">supervisorctl -c /etc/supervisord.conf</span><br><span class="line">supervisor&gt; status helloworld:*</span><br><span class="line">helloworld:hello                     RUNNING   pid 75042, uptime 0:03:12</span><br><span class="line">helloworld:world                   RUNNING   pid 75043, uptime 0:03:12</span><br><span class="line">supervisor&gt; stop helloworld:*</span><br><span class="line">helloworld:hello: stopped</span><br><span class="line">helloworld:world: stopped</span><br><span class="line">supervisor&gt; status helloworld:*</span><br><span class="line">helloworld:hello                    STOPPED   Nov 27 11:05 PM</span><br><span class="line">helloworld:world                   STOPPED   Nov 27 11:05 PM</span><br></pre></td></tr></table></figure></p>
+<p>子进程名前都加了前缀”helloworld:”，这样我们使用通配符”appgroup:*”来执行的命令就对进程组内所有的子进程起效了.</p>
+<h3 id="开机自启动"><a href="#开机自启动" class="headerlink" title="开机自启动"></a>开机自启动</h3><h4 id="ubuntu系统"><a href="#ubuntu系统" class="headerlink" title="ubuntu系统"></a>ubuntu系统</h4><p>编辑/etc/rc.local文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/rc.local</span><br></pre></td></tr></table></figure></p>
+<p>在exit 0 之前加入以下命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/supervisord</span><br></pre></td></tr></table></figure></p>
+<p>保存并退出。<br>最后修改rc.local权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /etc/rc.local</span><br></pre></td></tr></table></figure></p>
+<h4 id="centos系统"><a href="#centos系统" class="headerlink" title="centos系统"></a>centos系统</h4><p>新建文件supervisord.service<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#supervisord.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Supervisor daemon</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/bin/supervisord -c /etc/supervisord.conf</span><br><span class="line">ExecStop=/usr/bin/supervisorctl shutdown</span><br><span class="line">ExecReload=/usr/bin/supervisorctl reload</span><br><span class="line">KillMode=process</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=42s</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure></p>
+<p>将文件拷贝到/usr/lib/systemd/system/<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp supervisord.service /usr/lib/systemd/system/</span><br></pre></td></tr></table></figure></p>
+<p>启动服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable supervisord</span><br></pre></td></tr></table></figure></p>
+<p>验证一下是否为开机启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl is-enabled supervisord</span><br></pre></td></tr></table></figure></p>
+<h4 id="MacOs系统"><a href="#MacOs系统" class="headerlink" title="MacOs系统"></a>MacOs系统</h4><p>我们可以通过编写launched配置文件让supervisor开机自启，我们需要编辑/Library/LaunchDaemons/com.agendaless.supervisord.plist文件（需要root权限，如sudo）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span><br><span class="line">&lt;plist version=&quot;1.0&quot;&gt;</span><br><span class="line">&lt;dict&gt;</span><br><span class="line">    &lt;key&gt;KeepAlive&lt;/key&gt;</span><br><span class="line">    &lt;dict&gt;</span><br><span class="line">        &lt;key&gt;SuccessfulExit&lt;/key&gt;</span><br><span class="line">        &lt;false/&gt;</span><br><span class="line">    &lt;/dict&gt;</span><br><span class="line">    &lt;key&gt;Label&lt;/key&gt;</span><br><span class="line">    &lt;string&gt;com.agendaless.supervisord&lt;/string&gt;</span><br><span class="line">    &lt;key&gt;ProgramArguments&lt;/key&gt;</span><br><span class="line">    &lt;array&gt;</span><br><span class="line">        &lt;string&gt;/usr/local/bin/supervisord&lt;/string&gt;</span><br><span class="line">        &lt;string&gt;-n&lt;/string&gt;</span><br><span class="line">        &lt;string&gt;-c&lt;/string&gt;</span><br><span class="line">        &lt;string&gt;/etc/supervisord.conf&lt;/string&gt;</span><br><span class="line">    &lt;/array&gt;</span><br><span class="line">    &lt;key&gt;RunAtLoad&lt;/key&gt;</span><br><span class="line">    &lt;true/&gt;</span><br><span class="line">&lt;/dict&gt;</span><br><span class="line">&lt;/plist&gt;</span><br></pre></td></tr></table></figure></p>
+<p>其中配置文件的位置可以根据情况改变（例子里是/etc/supervisord.conf）<br>接着我们就可以注册这个plist了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">launchctl load /Library/LaunchDaemons/com.agendaless.supervisord.plist</span><br></pre></td></tr></table></figure></p>
+<p>如果一切正常，那么我们运行supervisorctl就可以看到正确的结果了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; sudo supervisorctl</span><br><span class="line">supervisor&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="遇到的问题1"><a href="#遇到的问题1" class="headerlink" title="遇到的问题1"></a>遇到的问题1</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unix:///tmp/supervisor.sock no such file</span><br></pre></td></tr></table></figure>
+<p>解决方案如下:<br>1、打开配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/supervisord.conf</span><br></pre></td></tr></table></figure></p>
+<p>这里把所有的/tmp路径改掉，/tmp/supervisor.sock 改成 /var/run/supervisor.sock，/tmp/supervisord.log 改成 /var/log/supervisor.log，/tmp/supervisord.pid 改成 /var/run/supervisor.pid 要不容易被linux自动清掉<br>2、修改权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 777 /run</span><br><span class="line">sudo chmod 777 /var/log</span><br></pre></td></tr></table></figure></p>
+<p>3、创建supervisor.sock<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo touch /var/run/supervisor.sock</span><br><span class="line">sudo chmod 777 /var/run/supervisor.sock</span><br></pre></td></tr></table></figure></p>
+<p>4、启动supervisord(可能需要等待短暂的时间过后才可以成功启动)注意stop之前的实例或杀死进程</p>
+<h2 id="遇到的问题2"><a href="#遇到的问题2" class="headerlink" title="遇到的问题2"></a>遇到的问题2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error: Another program is already listening on a port that one of our HTTP servers is configured to use.  Shut this program down first before starting supervisord.</span><br></pre></td></tr></table></figure>
+<p>解决方案:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo unlink /tmp/supervisor.sock</span><br><span class="line"></span><br><span class="line">sudo unlink /var/run/supervisor.sock</span><br></pre></td></tr></table></figure></p>
+<p>Supervisor 有很丰富的功能，还有其他很多项配置，可以在官方文档获取更多信息：<a href="http://supervisord.org/index.html" target="_blank" rel="noopener">http://supervisord.org/index.html</a></p>
+<p>本文参考自<a href="http://liyangliang.me/posts/2015/06/using-supervisor/" target="_blank" rel="noopener">liyangliang.me</a>,并对其文章进行补充~</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/进程管理/" rel="tag">#进程管理</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/942b36a3.html" rel="next">3proxy代理服务器使用</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div>
+      
+        <style type="text/css">
+
+    .donate_bar {
+        text-align: center;
+        margin-top : 5%;
+    }
+
+    .donate_bar.hidden {
+        display:none;
+    }
+/*
+    .donate_bar a.btn_donate {
+        display: inline-block;
+        width: 82px;
+        height: 82px;
+        margin-left:auto;
+        margin-right:auto;
+
+        background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+        _background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat; 
+
+        -webkit-transition: background 0s;
+        -moz-transition: background 0s;
+        -o-transition: background 0s;
+        -ms-transition: background 0s;
+        transition: background 0s;
+    }
+*/
+    .donate_bar a.btn_donate:hover { 
+        // background-position: 0px -82px;
+        color: #87daff
+    }
+
+    .donate_bar .donate_txt {
+        display: block;
+        color: #9d9d9d;
+        font: 14px/2 "Microsoft Yahei";
+    }
+
+    .bold { 
+        font-weight: bold; 
+    }
+
+    .post-donate a {
+        border-bottom: 0px;
+    }
+
+    #donate_guide table {
+        border: none;
+    }
+
+    #donate_guide td {
+        border-bottom: none;
+        border-right: none;
+        background: #333333;
+        valign: top;
+    }
+
+</style>
+
+
+
+    
+
+    <div class="post-donate">
+        <div id="donate_board" class="donate_bar center">
+              <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏">赏</a>
+              <span id="donate_txt" class="donate_txt">
+                   
+                        赏你一个
+                   
+              </span>
+            <br>
+        </div>  
+  
+        <div id="donate_guide" class="donate_bar center hidden">
+            <!--
+            
+                <a href="http://i2.bvimg.com/675051/8b50e6419cf6f82d.png" title="支付宝打赏" class="fancybox" rel="article0" 
+                    style="float:left;margin-left:25%;margin-right:10px;">
+                    <img src="http://i2.bvimg.com/675051/8b50e6419cf6f82d.png" title="" height="164px" width="164px">
+                </a> 
+              
+
+            
+                <a href="http://i2.bvimg.com/675051/9ea4ee469c30aa76.png" title="微信打赏" class="fancybox" rel="article0"
+                    style="margin-right:30%">
+                    <img src="http://i2.bvimg.com/675051/9ea4ee469c30aa76.png" title="" height="164px" width="164px">
+                </a>
+            
+            -->
+            <table>
+                <tr>
+                    <td>
+                        
+                            <a href="http://i2.bvimg.com/675051/8b50e6419cf6f82d.png" title="支付宝打赏" class="fancybox" rel="article0" style="float:left;margin-left:25%;margin-right:10px;">
+                                <img src="http://i2.bvimg.com/675051/8b50e6419cf6f82d.png" title="" height="164px" width="164px">
+                            </a> 
+                         
+                    </td>
+                    <td>
+                        
+                            <a href="http://i2.bvimg.com/675051/9ea4ee469c30aa76.png" title="微信打赏" class="fancybox" rel="article0" style="margin-right:30%">
+                                <img src="http://i2.bvimg.com/675051/9ea4ee469c30aa76.png" title="" height="164px" width="164px">
+                            </a>
+                        
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+                $('#donate_board').addClass('hidden');
+                // $('#donate_guide').removeClass('hidden');
+                $('#donate_guide').show(2000);
+            }
+
+        </script>
+    </div>
+
+    
+
+
+      
+    </div>
+
+    <div class="post-spread">
+      
+        <div class="bdsharebuttonbox">
+	<a href="#" class="bds_more" data-cmd="more"></a>
+	<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+	<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+	<a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+</div>
+<script>
+    window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+          <div class="comments" id="comments">
+            
+              <div id="disqus_thread">
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              </div>
+            <!--
+            
+            -->
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="wangfan" itemprop="image">
+          <p class="site-author-name" itemprop="name">wangfan</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">如果有一天，你不再寻找爱情，只是去爱；你不再渴望成功，只是去做；你不再追逐成长，只是去修；一切才真正开始</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://github.com/wf1314" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/wang-fan-6-56" target="_blank">ZhiHu</a>
+              </span>
+            
+          
+        </div>
+
+        <div class="links-of-friendly motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.idhyt.com/about/" target="_blank">About</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-supervisor-管理进程"><span class="nav-number">1.</span> <span class="nav-text">使用 supervisor 管理进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">1.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#supervisord-配置"><span class="nav-number">1.2.</span> <span class="nav-text">supervisord 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#program-配置"><span class="nav-number">1.3.</span> <span class="nav-text">program 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tips-1-Python-环境"><span class="nav-number">1.4.</span> <span class="nav-text">Tips 1: Python 环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tips-2-后台进程"><span class="nav-number">1.5.</span> <span class="nav-text">Tips 2: 后台进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tips-3-子进程"><span class="nav-number">1.6.</span> <span class="nav-text">Tips 3: 子进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-supervisorctl"><span class="nav-number">1.7.</span> <span class="nav-text">使用 supervisorctl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用web可视化管理"><span class="nav-number">1.8.</span> <span class="nav-text">使用web可视化管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程组"><span class="nav-number">1.9.</span> <span class="nav-text">进程组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开机自启动"><span class="nav-number">1.10.</span> <span class="nav-text">开机自启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ubuntu系统"><span class="nav-number">1.10.1.</span> <span class="nav-text">ubuntu系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#centos系统"><span class="nav-number">1.10.2.</span> <span class="nav-text">centos系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MacOs系统"><span class="nav-number">1.10.3.</span> <span class="nav-text">MacOs系统</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的问题1"><span class="nav-number">2.</span> <span class="nav-text">遇到的问题1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的问题2"><span class="nav-number">3.</span> <span class="nav-text">遇到的问题2</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </div></main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <div class="copyright">
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2019
+  </span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangfan
+  </span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+
+<div class="theme-info">
+  Theme by <a class="theme-link" href="http://blog.idhyt.com">idhyt</a>.<a class="theme-link" href="https://github.com/idhyt/hexo-theme-next/tree/magiclamp">Mala</a>
+</div>
+
+<!-- busuanzi -->
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  <script type="text/javascript">
+    var disqus_shortname = 'wf1314';
+    var disqus_identifier = 'post/86c9ee8.html';
+    var disqus_title = 'supervisor进程管理使用教程';
+    var disqus_url = 'http://yoursite.com/post/86c9ee8.html';
+
+    function run_disqus_script(disqus_script){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }
+
+    run_disqus_script('count.js');
+    
+      run_disqus_script('embed.js');
+    
+  </script>
+
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
