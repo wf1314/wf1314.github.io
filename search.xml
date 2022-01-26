@@ -1,89 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>Git Pages+Hexo+Matery主题搭建个人博客</title>
-    <url>/2022/01/26/Hexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h2 id="本文所使用环境如下"><a href="#本文所使用环境如下" class="headerlink" title="本文所使用环境如下:"></a>本文所使用环境如下:</h2><ul>
-<li>  MacOs-11.0.1</li>
-<li>  Node-16.9.1</li>
-<li>  Hexo-5.4.1</li>
-</ul>
-<h2 id="GitHub创建Git-Pages仓库"><a href="#GitHub创建Git-Pages仓库" class="headerlink" title="GitHub创建Git Pages仓库"></a>GitHub创建Git Pages仓库</h2><ul>
-<li>  登陆GitHub，新建一个名为”你的用户名.github.io”的仓库</li>
-<li>  创建index.html文件并输入任意内容</li>
-<li>  浏览器访问”https://你的用户名.github.io”查看是否创建成功</li>
-</ul>
-<h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><pre class="language-python" data-language="python"><code class="language-python">brew install node
-# 安装淘宝镜像
-npm install -g cnpm --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org</code></pre>
-
-<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><pre class="language-none"><code class="language-none">npm install -g hexo-cli</code></pre>
-<h2 id="创建hexo博客"><a href="#创建hexo博客" class="headerlink" title="创建hexo博客"></a>创建hexo博客</h2><pre class="language-none"><code class="language-none">mkdir blogs
-cd blogs
-hexo init
-npm install
-
-# 测试目录是否初始化成功
-hexo g
-hexo s</code></pre>
-<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><ul>
-<li>  修改blogs/_config.yml关联Git Pages仓库</li>
-</ul>
-<pre class="language-none"><code class="language-none">deploy:
-    type: git
-    repo: [Git Pages仓库地址]
-    branch: master
-
-# 安装部署插件
-npm install hexo-deployer-git --save
-
-# 部署
-hexo clean
-hexo d</code></pre>
-<ul>
-<li>  浏览器访问”<a href="https://你的用户名.github.io&quot;查看是否部署成功/">https://你的用户名.github.io&quot;查看是否部署成功</a></li>
-</ul>
-<h2 id="更换Matery主题"><a href="#更换Matery主题" class="headerlink" title="更换Matery主题"></a>更换Matery主题</h2><ul>
-<li>  <a href="https://github.com/blinkfox/hexo-theme-matery/blob/develop/README_CN.md">Matery中文文档</a></li>
-</ul>
-<h2 id="发布新的博客"><a href="#发布新的博客" class="headerlink" title="发布新的博客"></a>发布新的博客</h2><pre class="language-none"><code class="language-none">hexo new post 文章名称
-hexo clean
-hexo d -g # 生成并部署</code></pre>
-<h2 id="文章加密"><a href="#文章加密" class="headerlink" title="文章加密"></a>文章加密</h2><ul>
-<li><p>Matery支持对指定文章进行加密, 即访问文章前需要校验密码</p>
-<ul>
-<li>修改主题配置, 即themes目录下指定主题的_config.yml文件<ul>
-<li>  找到配置中的verifyPassword开启</li>
-</ul>
-</li>
-<li>  在需要加密的文章Front-matter中增加 password: SHA256加密密码(注: 需要将sha256结果转为16进制纯小写, 谷歌搜到的很多在线工具默认加密结果为大写会导致密码校验失败)</li>
-<li>  访问文章时弹窗中输入sha256加密前的密码</li>
-</ul>
-</li>
-<li><p>hexo-blog-encrypt插件实现文章加密</p>
-<ul>
-<li>  安装加密插件<pre class="language-none"><code class="language-none">npm install hexo-blog-encrypt --save</code></pre></li>
-<li>  外层配置文件增加配置项(注: 并非选定主题中的_config.yml)<pre class="language-none"><code class="language-none"># Security
-# 在需要加密的文章中增加private或protected标签即可, 访问密码为tags中对应password
-encrypt: # hexo-blog-encrypt
-    silent: true
-    abstract: 这是一篇加密文章，需要密码才能继续阅读。
-    message: 当前文章暂不对外可见，请输入密码后查看！
-    tags:  
-    - &#123;name: private, password: password1&#125;
-    - &#123;name: protected, password: password2&#125;
-    wrong_pass_message: 抱歉，您输入的密码错误，请检查后重新输入。
-    wrong_hash_message: 抱歉, 当前文章不能被校验, 不过您还是可以看看解密后的内容。</code></pre></li>
-</ul>
-</li>
-</ul>
-]]></content>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Git Pages+Hexo+Matery主题搭建个人博客</title>
+      <link href="/2022/01/26/Hexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+      <url>/2022/01/26/Hexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
+      
+        <content type="html"><![CDATA[<h2 id="本文所使用环境如下"><a href="#本文所使用环境如下" class="headerlink" title="本文所使用环境如下:"></a>本文所使用环境如下:</h2><ul><li>  MacOs-11.0.1</li><li>  Node-16.9.1</li><li>  Hexo-5.4.1</li></ul><h2 id="GitHub创建Git-Pages仓库"><a href="#GitHub创建Git-Pages仓库" class="headerlink" title="GitHub创建Git Pages仓库"></a>GitHub创建Git Pages仓库</h2><ul><li>  登陆GitHub，新建一个名为”你的用户名.github.io”的仓库</li><li>  创建index.html文件并输入任意内容</li><li>  浏览器访问”https://你的用户名.github.io”查看是否创建成功</li></ul><h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><pre class="language-python" data-language="python"><code class="language-python">brew install node# 安装淘宝镜像npm install -g cnpm --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org</code></pre><h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><pre class="language-none"><code class="language-none">npm install -g hexo-cli</code></pre><h2 id="创建hexo博客"><a href="#创建hexo博客" class="headerlink" title="创建hexo博客"></a>创建hexo博客</h2><pre class="language-none"><code class="language-none">mkdir blogscd blogshexo initnpm install# 测试目录是否初始化成功hexo ghexo s</code></pre><h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><ul><li>  修改blogs/_config.yml关联Git Pages仓库</li></ul><pre class="language-none"><code class="language-none">deploy:    type: git    repo: [Git Pages仓库地址]    branch: master# 安装部署插件npm install hexo-deployer-git --save# 部署hexo cleanhexo d</code></pre><ul><li>  浏览器访问”https://你的用户名.github.io”查看是否部署成功</li></ul><h2 id="更换Matery主题"><a href="#更换Matery主题" class="headerlink" title="更换Matery主题"></a>更换Matery主题</h2><ul><li>  <a href="https://github.com/blinkfox/hexo-theme-matery/blob/develop/README_CN.md">Matery中文文档</a></li></ul><h2 id="发布新的博客"><a href="#发布新的博客" class="headerlink" title="发布新的博客"></a>发布新的博客</h2><pre class="language-none"><code class="language-none">hexo new post 文章名称hexo cleanhexo d -g # 生成并部署</code></pre><h2 id="文章加密"><a href="#文章加密" class="headerlink" title="文章加密"></a>文章加密</h2><ul><li><p>Matery支持对指定文章进行加密, 即访问文章前需要校验密码</p><ul><li>修改主题配置, 即themes目录下指定主题的_config.yml文件<ul><li>  找到配置中的verifyPassword开启</li></ul></li><li>  在需要加密的文章Front-matter中增加 password: SHA256加密密码(注: 需要将sha256结果转为16进制纯小写, 谷歌搜到的很多在线工具默认加密结果为大写会导致密码校验失败)</li><li>  访问文章时弹窗中输入sha256加密前的密码</li></ul></li><li><p>hexo-blog-encrypt插件实现文章加密</p><ul><li>  安装加密插件<pre class="language-none"><code class="language-none">npm install hexo-blog-encrypt --save</code></pre></li><li>  外层配置文件增加配置项(注: 并非选定主题中的_config.yml)<pre class="language-none"><code class="language-none"># Security# 在需要加密的文章中增加private或protected标签即可, 访问密码为tags中对应passwordencrypt: # hexo-blog-encrypt    silent: true    abstract: 这是一篇加密文章，需要密码才能继续阅读。    message: 当前文章暂不对外可见，请输入密码后查看！    tags:      - &#123;name: private, password: password1&#125;    - &#123;name: protected, password: password2&#125;    wrong_pass_message: 抱歉，您输入的密码错误，请检查后重新输入。    wrong_hash_message: 抱歉, 当前文章不能被校验, 不过您还是可以看看解密后的内容。</code></pre></li></ul></li></ul>]]></content>
+      
+      
       <categories>
-        <category>技术相关</category>
+          
+          <category> 技术相关 </category>
+          
       </categories>
-      <tags>
-        <tag>博客</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> 博客 </tag>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>
