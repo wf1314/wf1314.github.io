@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Git Pages+Hexo+Matery主题搭建个人博客</title>
-    <url>/2022/01/26/Hexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
+    <url>/posts/1bfa13c0-7e9a-11ec-a2eb-93bcbf8a55e3/</url>
     <content><![CDATA[<h2 id="本文所使用环境如下"><a href="#本文所使用环境如下" class="headerlink" title="本文所使用环境如下:"></a>本文所使用环境如下:</h2><ul>
 <li>  MacOs-11.0.1</li>
 <li>  Node-16.9.1</li>
@@ -44,7 +44,10 @@ hexo d</code></pre>
 <li>  浏览器访问”https://你的用户名.github.io”查看是否部署成功</li>
 </ul>
 <h2 id="更换Matery主题"><a href="#更换Matery主题" class="headerlink" title="更换Matery主题"></a>更换Matery主题</h2><ul>
-<li>  <a href="https://github.com/blinkfox/hexo-theme-matery/blob/develop/README_CN.md">Matery中文文档</a></li>
+<li><a href="https://github.com/blinkfox/hexo-theme-matery/blob/develop/README_CN.md">Matery中文文档</a><ul>
+<li>按照文档中内容完成配置</li>
+</ul>
+</li>
 </ul>
 <h2 id="发布新的博客"><a href="#发布新的博客" class="headerlink" title="发布新的博客"></a>发布新的博客</h2><pre class="language-none"><code class="language-none">hexo new post 文章名称
 hexo clean
