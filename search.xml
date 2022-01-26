@@ -76,11 +76,15 @@ encrypt: # hexo-blog-encrypt
     - &#123;name: private, password: password1&#125;
     - &#123;name: protected, password: password2&#125;
     wrong_pass_message: 抱歉，您输入的密码错误，请检查后重新输入。
-    wrong_hash_message: 抱歉, 当前文章不能被校验, 不过您还是可以看看解密后的内容。</code></pre></li>
+    wrong_hash_message: 抱歉, 当前文章不能被校验, 不过您还是可以看看解密后的内容。
+&#96;&#96;&#96;密后的内容。</code></pre></li>
 </ul>
 </li>
 </ul>
-]]></content>
+<h2 id="固定url"><a href="#固定url" class="headerlink" title="固定url"></a>固定url</h2><p>解决修改文章名后url变化问题</p>
+<pre class="language-none"><code class="language-none">npm install hexo-uuid --save</code></pre>
+<p>修改外部_config.xml配置文件中的permalink</p>
+<pre class="language-none"><code class="language-none">permalink: posts&#x2F;:uuid&#x2F;</code></pre>]]></content>
       <categories>
         <category>博客搭建</category>
       </categories>
