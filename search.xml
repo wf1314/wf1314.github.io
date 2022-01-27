@@ -97,13 +97,10 @@ encrypt: # hexo-blog-encrypt
     <url>/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/</url>
     <content><![CDATA[<h1 id="远程仓库拉取代码"><a href="#远程仓库拉取代码" class="headerlink" title="远程仓库拉取代码"></a>远程仓库拉取代码</h1><pre class="language-none"><code class="language-none"># 拉取一个项目和它的整个代码历史
 git clone [https url|ssh url]
-
 # 拉取指定分支
 git clone [https url|ssh url] -b [branch] 
-
 # 仅拉取最近一次提交
 git clone [https url|ssh url] --depth 1
-
 # 本地关联远程仓库拉取代码
 git remote add origin [https url|ssh url]
 git pull origin [branch]</code></pre>
