@@ -4,15 +4,14 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Git Pages+Hexo+Matery主题搭建个人博客, fwwf的个人博客">
-    <meta name="description" content="本文所使用环境如下:
-  MacOs-11.0.1
-  Node-16.9.1
-  Hexo-5.4.1
+    <meta name="keywords" content="Git常用命令收集, fwwf的个人博客">
+    <meta name="description" content="远程仓库拉取代码# 拉取一个项目和它的整个代码历史
+git clone [https url|ssh url]
 
-GitHub创建Git Pages仓库
-  登陆GitHub，新建一个名为”你的用户名.github.io”的仓库
-  创建inde">
+# 拉取指定分支
+git clone [https url|ssh url] -b [branch] 
+
+# 仅拉取最近一次提">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -24,7 +23,7 @@ GitHub创建Git Pages仓库
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Git Pages+Hexo+Matery主题搭建个人博客 | fwwf的个人博客</title>
+    <title>Git常用命令收集 | fwwf的个人博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -245,12 +244,12 @@ GitHub创建Git Pages仓库
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Git Pages+Hexo+Matery主题搭建个人博客</h1>
+                    <h1 class="description center-align post-title">Git常用命令收集</h1>
                 </div>
             </div>
         </div>
@@ -366,12 +365,8 @@ GitHub创建Git Pages仓库
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%9A%E5%AE%A2/">
-                                <span class="chip bg-color">博客</span>
-                            </a>
-                        
-                            <a href="/tags/Hexo/">
-                                <span class="chip bg-color">Hexo</span>
+                            <a href="/tags/git/">
+                                <span class="chip bg-color">git</span>
                             </a>
                         
                     </div>
@@ -382,8 +377,8 @@ GitHub创建Git Pages仓库
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" class="post-category">
-                                博客搭建
+                            <a href="/categories/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-category">
+                                常用命令
                             </a>
                         
                     </div>
@@ -395,7 +390,7 @@ GitHub创建Git Pages仓库
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-01-26
+                    2022-01-27
                 </div>
                 
 
@@ -404,7 +399,7 @@ GitHub创建Git Pages仓库
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    593
+                    830
                 </div>
                 
 
@@ -429,87 +424,106 @@ GitHub创建Git Pages仓库
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="本文所使用环境如下"><a href="#本文所使用环境如下" class="headerlink" title="本文所使用环境如下:"></a>本文所使用环境如下:</h2><ul>
-<li>  MacOs-11.0.1</li>
-<li>  Node-16.9.1</li>
-<li>  Hexo-5.4.1</li>
-</ul>
-<h2 id="GitHub创建Git-Pages仓库"><a href="#GitHub创建Git-Pages仓库" class="headerlink" title="GitHub创建Git Pages仓库"></a>GitHub创建Git Pages仓库</h2><ul>
-<li>  登陆GitHub，新建一个名为”你的用户名.github.io”的仓库</li>
-<li>  创建index.html文件并输入任意内容</li>
-<li>  浏览器访问”https://你的用户名.github.io”查看是否创建成功</li>
-</ul>
-<h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><pre class="language-python" data-language="python"><code class="language-python">brew install node
-# 安装淘宝镜像
-npm install -g cnpm --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org</code></pre>
+                <h1 id="远程仓库拉取代码"><a href="#远程仓库拉取代码" class="headerlink" title="远程仓库拉取代码"></a>远程仓库拉取代码</h1><pre class="language-none"><code class="language-none"># 拉取一个项目和它的整个代码历史
+git clone [https url|ssh url]
 
-<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><pre class="language-none"><code class="language-none">npm install -g hexo-cli</code></pre>
-<h2 id="创建hexo博客"><a href="#创建hexo博客" class="headerlink" title="创建hexo博客"></a>创建hexo博客</h2><pre class="language-none"><code class="language-none">mkdir blogs
-cd blogs
-hexo init
-npm install
+# 拉取指定分支
+git clone [https url|ssh url] -b [branch] 
 
-# 测试目录是否初始化成功
-hexo g
-hexo s</code></pre>
-<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><ul>
-<li>  修改blogs/_config.yml关联Git Pages仓库</li>
-</ul>
-<pre class="language-none"><code class="language-none">deploy:
-    type: git
-    repo: [Git Pages仓库地址]
-    branch: master
+# 仅拉取最近一次提交
+git clone [https url|ssh url] --depth 1
 
-# 安装部署插件
-npm install hexo-deployer-git --save
+# 本地关联远程仓库拉取代码
+git remote add origin [https url|ssh url]
+git pull origin [branch]</code></pre>
 
-# 部署
-hexo clean
-hexo d</code></pre>
-<ul>
-<li>  浏览器访问”https://你的用户名.github.io”查看是否部署成功</li>
-</ul>
-<h2 id="更换Matery主题"><a href="#更换Matery主题" class="headerlink" title="更换Matery主题"></a>更换Matery主题</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/blinkfox/hexo-theme-matery/blob/develop/README_CN.md">Matery中文文档</a><ul>
-<li>按照文档中内容完成配置</li>
-</ul>
-</li>
-</ul>
-<h2 id="发布新的博客"><a href="#发布新的博客" class="headerlink" title="发布新的博客"></a>发布新的博客</h2><pre class="language-none"><code class="language-none">hexo new post 文章名称
-hexo clean
-hexo d -g # 生成并部署</code></pre>
-<h2 id="文章加密"><a href="#文章加密" class="headerlink" title="文章加密"></a>文章加密</h2><ul>
-<li><p>Matery支持对指定文章进行加密, 即访问文章前需要校验密码</p>
-<ul>
-<li>修改主题配置, 即themes目录下指定主题的_config.yml文件<ul>
-<li>  找到配置中的verifyPassword开启</li>
-</ul>
-</li>
-<li>  在需要加密的文章Front-matter中增加 password: SHA256加密密码(注: 需要将sha256结果转为16进制纯小写, 谷歌搜到的很多在线工具默认加密结果为大写会导致密码校验失败)</li>
-<li>  访问文章时弹窗中输入sha256加密前的密码</li>
-</ul>
-</li>
-<li><p>hexo-blog-encrypt插件实现文章加密</p>
-<ul>
-<li>  安装加密插件<pre class="language-none"><code class="language-none">npm install hexo-blog-encrypt --save</code></pre></li>
-<li>  外层配置文件增加配置项(注: 并非选定主题中的_config.yml)<pre class="language-none"><code class="language-none"># Security
-# 在需要加密的文章中增加private或protected标签即可, 访问密码为tags中对应password
-encrypt: # hexo-blog-encrypt
-    silent: true
-    abstract: 这是一篇加密文章，需要密码才能继续阅读。
-    message: 当前文章暂不对外可见，请输入密码后查看！
-    tags:  
-    - &#123;name: private, password: password1&#125;
-    - &#123;name: protected, password: password2&#125;
-    wrong_pass_message: 抱歉，您输入的密码错误，请检查后重新输入。
-    wrong_hash_message: 抱歉, 当前文章不能被校验, 不过您还是可以看看解密后的内容。</code></pre></li>
-</ul>
-</li>
-</ul>
-<h2 id="固定url"><a href="#固定url" class="headerlink" title="固定url"></a>固定url</h2><p>解决修改文章名后url变化问题</p>
-<pre class="language-none"><code class="language-none">npm install hexo-uuid --save</code></pre>
-<p>修改外部_config.xml配置文件中的permalink</p>
-<pre class="language-none"><code class="language-none">permalink: posts&#x2F;:uuid&#x2F;</code></pre>
+<h1 id="查看仓库信息"><a href="#查看仓库信息" class="headerlink" title="查看仓库信息"></a>查看仓库信息</h1><pre class="language-none"><code class="language-none"># 查看仓库当前的状态
+git status
+# 简化状态输出
+git status -s
+#查看指定文件的修改记录
+git blame [filename]
+# 查看未add文件变动
+git diff
+# 查看已add文件变动
+gut diff --cached
+# 查看已add和未add文件的变动
+git diff HEAD
+# 显示变动文件摘要
+git diff --stat
+# 对比两次提交的差异, 或两个分支的差异
+git diff [first-branch] [second-branch]
+# 查看历史提交
+git log
+# 查看简化版历史提交
+git log --oneline
+# 查看合并拓扑图
+git log --graph 
+# 逆向展示历史提交
+git log --reverse
+# 查看指定作者的历史提交
+git log --author&#x3D;[name]
+# 查看指定日期内的提交
+git log --oneline --before&#x3D;&#123;2022-01-18&#125; --after&#x3D;&#123;2020-01-18&#125;</code></pre>
+
+<h1 id="添加-删除-重命名文件"><a href="#添加-删除-重命名文件" class="headerlink" title="添加/删除/重命名文件"></a>添加/删除/重命名文件</h1><pre class="language-none"><code class="language-none"># 添加指定文件或目录到暂存区
+git add [filename]
+# 添加当前目录所有文件到暂存区
+git add .
+# 添加所有文件到暂存区
+git add --all
+# 删除文件
+git rm [filename]
+# 强制删除, 如果删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项 
+git rm [filename] -f
+# 把文件从暂存区域移除，但仍然希望保留在当前工作目录中
+git rm --cached [filename]
+# 文件重命名
+git mv [filename] [newfilename]
+# 强制重命名, 覆盖重复文件
+git mv -f [filename] [newfilename]</code></pre>
+
+<h1 id="提交"><a href="#提交" class="headerlink" title="提交"></a>提交</h1><pre class="language-none"><code class="language-none"># 提交所有暂存区文件
+git commit -m [msg]
+# 提交指定文件
+git commit [file1] [file2] ... -m [msg]
+# 追加提交, 不产生新的commit的情况下将新修改的代码追加到前一次的commit中
+# 也可用于修改commit msg
+git commit --amend
+# 空提交, 一般用于重跑ci
+git commit --allow-empty -m [msg]</code></pre>
+
+<h1 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h1><pre class="language-none"><code class="language-none"># 回退至上个版本
+git reset HEAD^
+# 回退某个文件到上个版本
+git reset HEAD^ [filename]
+# 回退到指定版本并保留当前版本改动
+git reset [commit-id]
+# 舍弃当前版本改动回退至指定版本
+git reset --hard [commit-id]
+# 回退到指定版本并将改动加入暂存区
+git reset --soft [commit-id]
+# 创建一个新的提交回退指定版本的内容(将制定commit-id提交的代码删除并生成一个新的提交)
+git revert [commit-id]</code></pre>
+
+<h1 id="代码合并"><a href="#代码合并" class="headerlink" title="代码合并"></a>代码合并</h1><pre class="language-none"><code class="language-none"># 将指定分支合并到当前分支, 有冲突需要解决冲突并提交新的commit
+git merge [branch]
+# 将指定分支作为base分支, 先处理冲突后按照时间线将commit合并, 对比merge合并提交的代码更加整洁
+git rebase [branch]
+# 将指定提交合并到当前分支
+git cherry-pick [commit-id]</code></pre>
+
+<h1 id="stash保存及恢复进度"><a href="#stash保存及恢复进度" class="headerlink" title="stash保存及恢复进度"></a>stash保存及恢复进度</h1><pre class="language-none"><code class="language-none"># 清理stash暂存区
+git stash clear
+# 将当前变动代码加入stash暂存区
+git stash 
+# 查看stash暂存区内容
+git stash list 
+# 将最后加入暂存区的内容提取到当前分支, 并从stash暂存区中删除
+git stash pop
+# 弹出stash暂存区中的指定内容
+git stash pop [stash-id]</code></pre>
+
                 
             </div>
             <hr/>
@@ -535,7 +549,7 @@ encrypt: # hexo-blog-encrypt
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wf1314.github.io/posts/1bfa13c0-7e9a-11ec-a2eb-93bcbf8a55e3/">https://wf1314.github.io/posts/1bfa13c0-7e9a-11ec-a2eb-93bcbf8a55e3/</a>
+                    <a href="https://wf1314.github.io/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/">https://wf1314.github.io/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -573,12 +587,8 @@ encrypt: # hexo-blog-encrypt
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%9A%E5%AE%A2/">
-                                    <span class="chip bg-color">博客</span>
-                                </a>
-                            
-                                <a href="/tags/Hexo/">
-                                    <span class="chip bg-color">Hexo</span>
+                                <a href="/tags/git/">
+                                    <span class="chip bg-color">git</span>
                                 </a>
                             
                         </div>
@@ -752,9 +762,10 @@ encrypt: # hexo-blog-encrypt
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/">
                     <div class="card-image">
@@ -772,9 +783,9 @@ encrypt: # hexo-blog-encrypt
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-01-27
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-27
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -787,6 +798,7 @@ encrypt: # hexo-blog-encrypt
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -802,7 +814,7 @@ encrypt: # hexo-blog-encrypt
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/posts/1bfa13c0-7e9a-11ec-a2eb-93bcbf8a55e3/">
@@ -836,7 +848,6 @@ encrypt: # hexo-blog-encrypt
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     

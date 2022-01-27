@@ -1,6 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Git常用命令收集</title>
+    <url>/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/</url>
+    <content><![CDATA[<h1 id="远程仓库拉取代码"><a href="#远程仓库拉取代码" class="headerlink" title="远程仓库拉取代码"></a>远程仓库拉取代码</h1><pre class="language-none"><code class="language-none"># 拉取一个项目和它的整个代码历史
+git clone [https url|ssh url]
+
+# 拉取指定分支
+git clone [https url|ssh url] -b [branch] 
+
+# 仅拉取最近一次提交
+git clone [https url|ssh url] --depth 1
+
+# 本地关联远程仓库拉取代码
+git remote add origin [https url|ssh url]
+git pull origin [branch]</code></pre>
+
+<h1 id="查看仓库信息"><a href="#查看仓库信息" class="headerlink" title="查看仓库信息"></a>查看仓库信息</h1><pre class="language-none"><code class="language-none"># 查看仓库当前的状态
+git status
+# 简化状态输出
+git status -s
+#查看指定文件的修改记录
+git blame [filename]
+# 查看未add文件变动
+git diff
+# 查看已add文件变动
+gut diff --cached
+# 查看已add和未add文件的变动
+git diff HEAD
+# 显示变动文件摘要
+git diff --stat
+# 对比两次提交的差异, 或两个分支的差异
+git diff [first-branch] [second-branch]
+# 查看历史提交
+git log
+# 查看简化版历史提交
+git log --oneline
+# 查看合并拓扑图
+git log --graph 
+# 逆向展示历史提交
+git log --reverse
+# 查看指定作者的历史提交
+git log --author&#x3D;[name]
+# 查看指定日期内的提交
+git log --oneline --before&#x3D;&#123;2022-01-18&#125; --after&#x3D;&#123;2020-01-18&#125;</code></pre>
+
+<h1 id="添加-删除-重命名文件"><a href="#添加-删除-重命名文件" class="headerlink" title="添加/删除/重命名文件"></a>添加/删除/重命名文件</h1><pre class="language-none"><code class="language-none"># 添加指定文件或目录到暂存区
+git add [filename]
+# 添加当前目录所有文件到暂存区
+git add .
+# 添加所有文件到暂存区
+git add --all
+# 删除文件
+git rm [filename]
+# 强制删除, 如果删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项 
+git rm [filename] -f
+# 把文件从暂存区域移除，但仍然希望保留在当前工作目录中
+git rm --cached [filename]
+# 文件重命名
+git mv [filename] [newfilename]
+# 强制重命名, 覆盖重复文件
+git mv -f [filename] [newfilename]</code></pre>
+
+<h1 id="提交"><a href="#提交" class="headerlink" title="提交"></a>提交</h1><pre class="language-none"><code class="language-none"># 提交所有暂存区文件
+git commit -m [msg]
+# 提交指定文件
+git commit [file1] [file2] ... -m [msg]
+# 追加提交, 不产生新的commit的情况下将新修改的代码追加到前一次的commit中
+# 也可用于修改commit msg
+git commit --amend
+# 空提交, 一般用于重跑ci
+git commit --allow-empty -m [msg]</code></pre>
+
+<h1 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h1><pre class="language-none"><code class="language-none"># 回退至上个版本
+git reset HEAD^
+# 回退某个文件到上个版本
+git reset HEAD^ [filename]
+# 回退到指定版本并保留当前版本改动
+git reset [commit-id]
+# 舍弃当前版本改动回退至指定版本
+git reset --hard [commit-id]
+# 回退到指定版本并将改动加入暂存区
+git reset --soft [commit-id]
+# 创建一个新的提交回退指定版本的内容(将制定commit-id提交的代码删除并生成一个新的提交)
+git revert [commit-id]</code></pre>
+
+<h1 id="代码合并"><a href="#代码合并" class="headerlink" title="代码合并"></a>代码合并</h1><pre class="language-none"><code class="language-none"># 将指定分支合并到当前分支, 有冲突需要解决冲突并提交新的commit
+git merge [branch]
+# 将指定分支作为base分支, 先处理冲突后按照时间线将commit合并, 对比merge合并提交的代码更加整洁
+git rebase [branch]
+# 将指定提交合并到当前分支
+git cherry-pick [commit-id]</code></pre>
+
+<h1 id="stash保存及恢复进度"><a href="#stash保存及恢复进度" class="headerlink" title="stash保存及恢复进度"></a>stash保存及恢复进度</h1><pre class="language-none"><code class="language-none"># 清理stash暂存区
+git stash clear
+# 将当前变动代码加入stash暂存区
+git stash 
+# 查看stash暂存区内容
+git stash list 
+# 将最后加入暂存区的内容提取到当前分支, 并从stash暂存区中删除
+git stash pop
+# 弹出stash暂存区中的指定内容
+git stash pop [stash-id]</code></pre>
+]]></content>
+      <categories>
+        <category>常用命令</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git Pages+Hexo+Matery主题搭建个人博客</title>
     <url>/posts/1bfa13c0-7e9a-11ec-a2eb-93bcbf8a55e3/</url>
     <content><![CDATA[<h2 id="本文所使用环境如下"><a href="#本文所使用环境如下" class="headerlink" title="本文所使用环境如下:"></a>本文所使用环境如下:</h2><ul>
@@ -76,8 +186,7 @@ encrypt: # hexo-blog-encrypt
     - &#123;name: private, password: password1&#125;
     - &#123;name: protected, password: password2&#125;
     wrong_pass_message: 抱歉，您输入的密码错误，请检查后重新输入。
-    wrong_hash_message: 抱歉, 当前文章不能被校验, 不过您还是可以看看解密后的内容。
-&#96;&#96;&#96;密后的内容。</code></pre></li>
+    wrong_hash_message: 抱歉, 当前文章不能被校验, 不过您还是可以看看解密后的内容。</code></pre></li>
 </ul>
 </li>
 </ul>
