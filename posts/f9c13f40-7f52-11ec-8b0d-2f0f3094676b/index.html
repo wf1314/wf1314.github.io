@@ -455,7 +455,9 @@ git log --reverse
 # 查看指定作者的历史提交
 git log --author&#x3D;[name]
 # 查看指定日期内的提交
-git log --oneline --before&#x3D;&#123;2022-01-18&#125; --after&#x3D;&#123;2020-01-18&#125;</code></pre>
+git log --oneline --before&#x3D;&#123;2022-01-18&#125; --after&#x3D;&#123;2020-01-18&#125;
+# 查看仓库所有变动信息, reflog-id也可用作回退
+git reflog</code></pre>
 
 <h2 id="添加-删除-重命名文件"><a href="#添加-删除-重命名文件" class="headerlink" title="添加/删除/重命名文件"></a>添加/删除/重命名文件</h2><pre class="language-none"><code class="language-none"># 添加指定文件或目录到暂存区
 git add [filename]
