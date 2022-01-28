@@ -5,12 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Git常用命令收集, fwwf的个人博客">
-    <meta name="description" content="远程仓库拉取代码# 拉取一个项目和它的整个代码历史
-git clone [https url|ssh url]
-# 拉取指定分支
-git clone [https url|ssh url] -b [branch] 
-# 仅拉取最近一次提交
-">
+    <meta name="description" content="记录git常用命令及commit规范">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -398,7 +393,7 @@ git clone [https url|ssh url] -b [branch]
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    830
+                    1.2k
                 </div>
                 
 
@@ -423,7 +418,7 @@ git clone [https url|ssh url] -b [branch]
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="远程仓库拉取代码"><a href="#远程仓库拉取代码" class="headerlink" title="远程仓库拉取代码"></a>远程仓库拉取代码</h1><pre class="language-none"><code class="language-none"># 拉取一个项目和它的整个代码历史
+                <h2 id="远程仓库拉取代码"><a href="#远程仓库拉取代码" class="headerlink" title="远程仓库拉取代码"></a>远程仓库拉取代码</h2><pre class="language-none"><code class="language-none"># 拉取一个项目和它的整个代码历史
 git clone [https url|ssh url]
 # 拉取指定分支
 git clone [https url|ssh url] -b [branch] 
@@ -433,7 +428,7 @@ git clone [https url|ssh url] --depth 1
 git remote add origin [https url|ssh url]
 git pull origin [branch]</code></pre>
 
-<h1 id="查看仓库信息"><a href="#查看仓库信息" class="headerlink" title="查看仓库信息"></a>查看仓库信息</h1><pre class="language-none"><code class="language-none"># 查看仓库当前的状态
+<h2 id="查看仓库信息"><a href="#查看仓库信息" class="headerlink" title="查看仓库信息"></a>查看仓库信息</h2><pre class="language-none"><code class="language-none"># 查看仓库当前的状态
 git status
 # 简化状态输出
 git status -s
@@ -462,7 +457,7 @@ git log --author&#x3D;[name]
 # 查看指定日期内的提交
 git log --oneline --before&#x3D;&#123;2022-01-18&#125; --after&#x3D;&#123;2020-01-18&#125;</code></pre>
 
-<h1 id="添加-删除-重命名文件"><a href="#添加-删除-重命名文件" class="headerlink" title="添加/删除/重命名文件"></a>添加/删除/重命名文件</h1><pre class="language-none"><code class="language-none"># 添加指定文件或目录到暂存区
+<h2 id="添加-删除-重命名文件"><a href="#添加-删除-重命名文件" class="headerlink" title="添加/删除/重命名文件"></a>添加/删除/重命名文件</h2><pre class="language-none"><code class="language-none"># 添加指定文件或目录到暂存区
 git add [filename]
 # 添加当前目录所有文件到暂存区
 git add .
@@ -479,7 +474,7 @@ git mv [filename] [newfilename]
 # 强制重命名, 覆盖重复文件
 git mv -f [filename] [newfilename]</code></pre>
 
-<h1 id="提交"><a href="#提交" class="headerlink" title="提交"></a>提交</h1><pre class="language-none"><code class="language-none"># 提交所有暂存区文件
+<h2 id="提交"><a href="#提交" class="headerlink" title="提交"></a>提交</h2><pre class="language-none"><code class="language-none"># 提交所有暂存区文件
 git commit -m [msg]
 # 提交指定文件
 git commit [file1] [file2] ... -m [msg]
@@ -489,7 +484,7 @@ git commit --amend
 # 空提交, 一般用于重跑ci
 git commit --allow-empty -m [msg]</code></pre>
 
-<h1 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h1><pre class="language-none"><code class="language-none"># 回退至上个版本
+<h2 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h2><pre class="language-none"><code class="language-none"># 回退至上个版本
 git reset HEAD^
 # 回退某个文件到上个版本
 git reset HEAD^ [filename]
@@ -502,14 +497,14 @@ git reset --soft [commit-id]
 # 创建一个新的提交回退指定版本的内容(将制定commit-id提交的代码删除并生成一个新的提交)
 git revert [commit-id]</code></pre>
 
-<h1 id="代码合并"><a href="#代码合并" class="headerlink" title="代码合并"></a>代码合并</h1><pre class="language-none"><code class="language-none"># 将指定分支合并到当前分支, 有冲突需要解决冲突并提交新的commit
+<h2 id="代码合并"><a href="#代码合并" class="headerlink" title="代码合并"></a>代码合并</h2><pre class="language-none"><code class="language-none"># 将指定分支合并到当前分支, 有冲突需要解决冲突并提交新的commit
 git merge [branch]
 # 将指定分支作为base分支, 先处理冲突后按照时间线将commit合并, 对比merge合并提交的代码更加整洁
 git rebase [branch]
 # 将指定提交合并到当前分支
 git cherry-pick [commit-id]</code></pre>
 
-<h1 id="stash保存及恢复进度"><a href="#stash保存及恢复进度" class="headerlink" title="stash保存及恢复进度"></a>stash保存及恢复进度</h1><pre class="language-none"><code class="language-none"># 清理stash暂存区
+<h2 id="stash保存及恢复进度"><a href="#stash保存及恢复进度" class="headerlink" title="stash保存及恢复进度"></a>stash保存及恢复进度</h2><pre class="language-none"><code class="language-none"># 清理stash暂存区
 git stash clear
 # 将当前变动代码加入stash暂存区
 git stash 
@@ -519,6 +514,82 @@ git stash list
 git stash pop
 # 弹出stash暂存区中的指定内容
 git stash pop [stash-id]</code></pre>
+
+<h2 id="git-commit-Angular规范"><a href="#git-commit-Angular规范" class="headerlink" title="git commit Angular规范"></a>git commit Angular规范</h2><p>commit message的规范有助于我们对于提交历史的追溯, 也会让我们在每次提交时更加慎重</p>
+<p>格式如下</p>
+<pre class="language-none"><code class="language-none">&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;</code></pre>
+
+<ul>
+<li><p>type(必须)</p>
+<p>  用于说明git commit的类别，只允许使用下面的标识。</p>
+</li>
+<li><p>scope(可选)</p>
+<p>  scope用于说明 commit 影响的范围，比如数据层、控制层、视图层等等，视项目不同而不同。</p>
+<p>  例如在Angular，可以是location，browser，compile，compile，rootScope， ngHref，ngClick，ngView等。如果你的修改影响了不止一个scope，你可以使用*代替。</p>
+</li>
+<li><p>subject(必须)</p>
+<p>  subject是commit目的的简短描述，不超过50个字符。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>type选项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>feat</td>
+<td>新功能（feature）。</td>
+</tr>
+<tr>
+<td>fix/to</td>
+<td>修复bug，可以是QA发现的BUG，也可以是研发自己发现的BUG。</td>
+</tr>
+<tr>
+<td>fix</td>
+<td>产生diff并自动修复此问题。适合于一次提交直接修复问题</td>
+</tr>
+<tr>
+<td>to</td>
+<td>只产生diff不自动修复此问题。适合于多次提交。最终修复问题提交时使用fix</td>
+</tr>
+<tr>
+<td>docs</td>
+<td>文档（documentation）。</td>
+</tr>
+<tr>
+<td>style</td>
+<td>格式（不影响代码运行的变动）。</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td>重构（即不是新增功能，也不是修改bug的代码变动）。</td>
+</tr>
+<tr>
+<td>test</td>
+<td>增加测试。</td>
+</tr>
+<tr>
+<td>chore</td>
+<td>构建过程或辅助工具的变动。</td>
+</tr>
+<tr>
+<td>revert</td>
+<td>回滚到上一个版本。</td>
+</tr>
+<tr>
+<td>merge</td>
+<td>代码合并。</td>
+</tr>
+<tr>
+<td>sync</td>
+<td>同步主线或分支的Bug。</td>
+</tr>
+</tbody></table>
+<p>提交示例</p>
+<pre class="language-none"><code class="language-none">fix(login): 修复账号中有不合法字符导致校验错误
+feat(export): 增加导出功能 </code></pre>
 
                 
             </div>
@@ -775,7 +846,7 @@ git stash pop [stash-id]</code></pre>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            记录git常用命令及commit规范
                         
                     </div>
                     <div class="publish-info">
@@ -825,7 +896,7 @@ git stash pop [stash-id]</code></pre>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            记录hexo博客搭建的过程已经发布文章的常用命令等
                         
                     </div>
                     <div class="publish-info">

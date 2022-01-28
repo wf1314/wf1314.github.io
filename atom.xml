@@ -6,7 +6,7 @@
   <link href="https://wf1314.github.io/atom.xml" rel="self"/>
   
   <link href="https://wf1314.github.io/"/>
-  <updated>2022-01-27T11:10:25.065Z</updated>
+  <updated>2022-01-28T03:27:00.988Z</updated>
   <id>https://wf1314.github.io/</id>
   
   <author>
@@ -21,14 +21,14 @@
     <link href="https://wf1314.github.io/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/"/>
     <id>https://wf1314.github.io/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/</id>
     <published>2022-01-27T09:24:49.000Z</published>
-    <updated>2022-01-27T11:10:25.065Z</updated>
+    <updated>2022-01-28T03:27:00.988Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;远程仓库拉取代码&quot;&gt;&lt;a href=&quot;#远程仓库拉取代码&quot; class=&quot;headerlink&quot; title=&quot;远程仓库拉取代码&quot;&gt;&lt;/a&gt;远程仓库拉取代码&lt;/h1&gt;&lt;pre class=&quot;language-none&quot;&gt;&lt;code</summary>
+    <summary type="html">&lt;h2 id=&quot;远程仓库拉取代码&quot;&gt;&lt;a href=&quot;#远程仓库拉取代码&quot; class=&quot;headerlink&quot; title=&quot;远程仓库拉取代码&quot;&gt;&lt;/a&gt;远程仓库拉取代码&lt;/h2&gt;&lt;pre class=&quot;language-none&quot;&gt;&lt;code</summary>
         
       
     
@@ -46,16 +46,15 @@
     <link href="https://wf1314.github.io/posts/1bfa13c0-7e9a-11ec-a2eb-93bcbf8a55e3/"/>
     <id>https://wf1314.github.io/posts/1bfa13c0-7e9a-11ec-a2eb-93bcbf8a55e3/</id>
     <published>2022-01-26T06:21:08.000Z</published>
-    <updated>2022-01-27T11:09:26.813Z</updated>
+    <updated>2022-01-28T03:06:00.456Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;本文所使用环境如下&quot;&gt;&lt;a href=&quot;#本文所使用环境如下&quot; class=&quot;headerlink&quot; title=&quot;本文所使用环境如下:&quot;&gt;&lt;/a&gt;本文所使用环境如下:&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;  MacOs-11.0.1&lt;/li&gt;
-&lt;li&gt; </summary>
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;搭建个人博客的目的:&lt;/p&gt;
+&lt;p&gt;分享并记录自己的成长过程, 记录自己开发过程中遇到的一些难题,</summary>
         
       
     
