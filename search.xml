@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Docker常用命令</title>
+    <url>/posts/17954850-8d67-11ec-8505-fffcfa42a684/</url>
+    <content><![CDATA[<h2 id="Dockerhub-搜索下载远程镜像"><a href="#Dockerhub-搜索下载远程镜像" class="headerlink" title="Dockerhub 搜索下载远程镜像"></a>Dockerhub 搜索下载远程镜像</h2><pre class="language-none"><code class="language-none"># 搜索
+docker search ImageName
+# 下载
+docker pull ImageName 或 docker pull ImageName:VersionNumber</code></pre>
+
+<h2 id="查看本地镜像"><a href="#查看本地镜像" class="headerlink" title="查看本地镜像"></a>查看本地镜像</h2><pre class="language-none"><code class="language-none">docker images [OPTIONS] [REPOSITORY[:TAG]]</code></pre>
+
+<p>OPTIONS说明：</p>
+<p>-a :列出本地所有的镜像（含中间映像层，默认情况下，过滤掉中间映像层）；<br>–digests :显示镜像的摘要信息；<br>-f :显示满足条件的镜像；<br>–format :指定返回值的模板文件；<br>–no-trunc :显示完整的镜像信息；<br>-q :只显示镜像ID。</p>
+<h2 id="删除本地镜像"><a href="#删除本地镜像" class="headerlink" title="删除本地镜像"></a>删除本地镜像</h2><pre class="language-none"><code class="language-none">docker rmi ImageName
+docker rmi ImageName:VersionNumber</code></pre>
+
+<h2 id="Dockerfile本地构建容器"><a href="#Dockerfile本地构建容器" class="headerlink" title="Dockerfile本地构建容器"></a>Dockerfile本地构建容器</h2><pre class="language-none"><code class="language-none">docker build -t image_name Dockerfile_path</code></pre>
+<p>选项说明：</p>
+<p>–build-arg=[]：设置镜像创建时的变量；<br>–cpu-shares：设置 cpu 使用权重；<br>–cpu-period：限制 CPU CFS周期；<br>–cpu-quota：限制 CPU CFS配额；<br>–cpuset-cpus：指定使用的CPU id；<br>–cpuset-mems：指定使用的内存 id；<br>–disable-content-trust：忽略校验，默认开启；<br>-f：指定要使用的Dockerfile路径；<br>–force-rm：设置镜像过程中删除中间容器；<br>–isolation：使用容器隔离技术；<br>–label=[]：设置镜像使用的元数据；<br>-m：设置内存最大值；</p>
+<h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><pre class="language-none"><code class="language-none"># 启动容器，如果本地没有要启动的镜像，会自动下载,每次新建一个容器
+docker run ImageName
+# 只是单纯的启动。不会新建容器
+docker start Name or ID
+# 交互是进入容器
+docker run -it ImageName &#x2F;bin&#x2F;bash</code></pre>
+
+<h2 id="查看容器"><a href="#查看容器" class="headerlink" title="查看容器"></a>查看容器</h2><pre class="language-none"><code class="language-none"># 列出所有容器
+docker ps -a
+# 仅查看当前正在运行的所有容器
+docker ps
+# 查看最后一次运行的容器
+docker ps -l
+# 查看容器日志
+docker logs Name&#x2F;ID
+# 列出一个容器里面被改变的文件或者目录，list列表会显示出三种事件，A：增加的，D： 删除的，C： 被改变的 
+docker diff Name&#x2F;ID
+# 查看容器进程pid
+docker top Name&#x2F;ID</code></pre>
+
+<h2 id="启动、停止、杀死一个容器"><a href="#启动、停止、杀死一个容器" class="headerlink" title="启动、停止、杀死一个容器"></a>启动、停止、杀死一个容器</h2><pre class="language-none"><code class="language-none"># 启动容器
+docker start Name&#x2F;ID
+# docker stop，支持“优雅退出”。先发送SIGTERM信号，在一段时间之后（10s）再发送SIGKILL信号。Docker内部的应用程序可以接收SIGTERM信号，然后做一些“退出前工作”，比如保存状态、处理当前请求等。
+# docker kill，发送SIGKILL信号，应用程序直接退出。
+docker stop Name&#x2F;ID
+docker kill Name&#x2F;ID
+# 重启容器
+docker restart Name&#x2F;ID</code></pre>
+
+<h2 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h2><pre class="language-none"><code class="language-none"># 删除所有容器
+docker rm &#96;docker ps -a -q&#96;
+# 删除单个容器
+docker rm Name&#x2F;ID</code></pre>
+
+<h2 id="连接到正在运行中的容器"><a href="#连接到正在运行中的容器" class="headerlink" title="连接到正在运行中的容器"></a>连接到正在运行中的容器</h2><pre class="language-none"><code class="language-none"># --sig-proxy&#x3D;false ：此选项作用是按CTRL-D或CTRL-C不会关闭容器
+docker attach --sig-proxy&#x3D;false Name&#x2F;ID</code></pre>
+
+<h2 id="根据容器变动创建新的镜像"><a href="#根据容器变动创建新的镜像" class="headerlink" title="根据容器变动创建新的镜像"></a>根据容器变动创建新的镜像</h2><pre class="language-none"><code class="language-none">docker commit ID new_image_name</code></pre>
+<p>选项说明:<br>-a :提交的镜像作者；<br>-c :使用Dockerfile指令来创建镜像；<br>-m :提交时的说明文字；<br>-p :在commit时，将容器暂停。</p>
+<h2 id="保存和加载镜像"><a href="#保存和加载镜像" class="headerlink" title="保存和加载镜像"></a>保存和加载镜像</h2><pre class="language-none"><code class="language-none"># 保存镜像到一个tar包
+docker save image_name -o file_path
+# 加载一个tar包对象
+docker load -i file_path</code></pre>]]></content>
+      <categories>
+        <category>常用命令</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git常用命令收集</title>
     <url>/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/</url>
     <content><![CDATA[<h2 id="远程仓库拉取代码"><a href="#远程仓库拉取代码" class="headerlink" title="远程仓库拉取代码"></a>远程仓库拉取代码</h2><pre class="language-none"><code class="language-none"># 拉取一个项目和它的整个代码历史

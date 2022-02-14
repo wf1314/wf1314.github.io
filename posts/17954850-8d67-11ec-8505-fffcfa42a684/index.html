@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Git常用命令收集, fwwf的个人博客">
-    <meta name="description" content="记录git常用命令及commit规范">
+    <meta name="keywords" content="Docker常用命令, fwwf的个人博客">
+    <meta name="description" content="Docker常用命令">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Git常用命令收集 | fwwf的个人博客</title>
+    <title>Docker常用命令 | fwwf的个人博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -238,12 +238,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Git常用命令收集</h1>
+                    <h1 class="description center-align post-title">Docker常用命令</h1>
                 </div>
             </div>
         </div>
@@ -359,8 +359,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/git/">
-                                <span class="chip bg-color">git</span>
+                            <a href="/tags/Docker/">
+                                <span class="chip bg-color">Docker</span>
                             </a>
                         
                     </div>
@@ -384,7 +384,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-01-27
+                    2022-02-14
                 </div>
                 
 
@@ -393,7 +393,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.2k
+                    724
                 </div>
                 
 
@@ -418,181 +418,64 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="远程仓库拉取代码"><a href="#远程仓库拉取代码" class="headerlink" title="远程仓库拉取代码"></a>远程仓库拉取代码</h2><pre class="language-none"><code class="language-none"># 拉取一个项目和它的整个代码历史
-git clone [https url|ssh url]
-# 拉取指定分支
-git clone [https url|ssh url] -b [branch] 
-# 仅拉取最近一次提交
-git clone [https url|ssh url] --depth 1
-# 本地关联远程仓库拉取代码
-git remote add origin [https url|ssh url]
-git pull origin [branch]</code></pre>
+                <h2 id="Dockerhub-搜索下载远程镜像"><a href="#Dockerhub-搜索下载远程镜像" class="headerlink" title="Dockerhub 搜索下载远程镜像"></a>Dockerhub 搜索下载远程镜像</h2><pre class="language-none"><code class="language-none"># 搜索
+docker search ImageName
+# 下载
+docker pull ImageName 或 docker pull ImageName:VersionNumber</code></pre>
 
-<h2 id="查看仓库信息"><a href="#查看仓库信息" class="headerlink" title="查看仓库信息"></a>查看仓库信息</h2><pre class="language-none"><code class="language-none"># 查看仓库当前的状态
-git status
-# 简化状态输出
-git status -s
-#查看指定文件的修改记录
-git blame [filename]
-# 查看未add文件变动
-git diff
-# 查看已add文件变动
-gut diff --cached
-# 查看已add和未add文件的变动
-git diff HEAD
-# 显示变动文件摘要
-git diff --stat
-# 对比两次提交的差异, 或两个分支的差异
-git diff [first-branch] [second-branch]
-# 查看历史提交
-git log
-# 查看简化版历史提交
-git log --oneline
-# 查看合并拓扑图
-git log --graph 
-# 逆向展示历史提交
-git log --reverse
-# 查看指定作者的历史提交
-git log --author&#x3D;[name]
-# 查看指定日期内的提交
-git log --oneline --before&#x3D;&#123;2022-01-18&#125; --after&#x3D;&#123;2020-01-18&#125;
-# 查看仓库所有变动信息, reflog-id也可用作回退
-git reflog</code></pre>
+<h2 id="查看本地镜像"><a href="#查看本地镜像" class="headerlink" title="查看本地镜像"></a>查看本地镜像</h2><pre class="language-none"><code class="language-none">docker images [OPTIONS] [REPOSITORY[:TAG]]</code></pre>
 
-<h2 id="添加-删除-重命名文件"><a href="#添加-删除-重命名文件" class="headerlink" title="添加/删除/重命名文件"></a>添加/删除/重命名文件</h2><pre class="language-none"><code class="language-none"># 添加指定文件或目录到暂存区
-git add [filename]
-# 添加当前目录所有文件到暂存区
-git add .
-# 添加所有文件到暂存区
-git add --all
-# 删除文件
-git rm [filename]
-# 强制删除, 如果删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项 
-git rm [filename] -f
-# 把文件从暂存区域移除，但仍然希望保留在当前工作目录中
-git rm --cached [filename]
-# 文件重命名
-git mv [filename] [newfilename]
-# 强制重命名, 覆盖重复文件
-git mv -f [filename] [newfilename]</code></pre>
+<p>OPTIONS说明：</p>
+<p>-a :列出本地所有的镜像（含中间映像层，默认情况下，过滤掉中间映像层）；<br>–digests :显示镜像的摘要信息；<br>-f :显示满足条件的镜像；<br>–format :指定返回值的模板文件；<br>–no-trunc :显示完整的镜像信息；<br>-q :只显示镜像ID。</p>
+<h2 id="删除本地镜像"><a href="#删除本地镜像" class="headerlink" title="删除本地镜像"></a>删除本地镜像</h2><pre class="language-none"><code class="language-none">docker rmi ImageName
+docker rmi ImageName:VersionNumber</code></pre>
 
-<h2 id="提交"><a href="#提交" class="headerlink" title="提交"></a>提交</h2><pre class="language-none"><code class="language-none"># 提交所有暂存区文件
-git commit -m [msg]
-# 提交指定文件
-git commit [file1] [file2] ... -m [msg]
-# 追加提交, 不产生新的commit的情况下将新修改的代码追加到前一次的commit中
-# 也可用于修改commit msg
-git commit --amend
-# 空提交, 一般用于重跑ci
-git commit --allow-empty -m [msg]</code></pre>
+<h2 id="Dockerfile本地构建容器"><a href="#Dockerfile本地构建容器" class="headerlink" title="Dockerfile本地构建容器"></a>Dockerfile本地构建容器</h2><pre class="language-none"><code class="language-none">docker build -t image_name Dockerfile_path</code></pre>
+<p>选项说明：</p>
+<p>–build-arg=[]：设置镜像创建时的变量；<br>–cpu-shares：设置 cpu 使用权重；<br>–cpu-period：限制 CPU CFS周期；<br>–cpu-quota：限制 CPU CFS配额；<br>–cpuset-cpus：指定使用的CPU id；<br>–cpuset-mems：指定使用的内存 id；<br>–disable-content-trust：忽略校验，默认开启；<br>-f：指定要使用的Dockerfile路径；<br>–force-rm：设置镜像过程中删除中间容器；<br>–isolation：使用容器隔离技术；<br>–label=[]：设置镜像使用的元数据；<br>-m：设置内存最大值；</p>
+<h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><pre class="language-none"><code class="language-none"># 启动容器，如果本地没有要启动的镜像，会自动下载,每次新建一个容器
+docker run ImageName
+# 只是单纯的启动。不会新建容器
+docker start Name or ID
+# 交互是进入容器
+docker run -it ImageName &#x2F;bin&#x2F;bash</code></pre>
 
-<h2 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h2><pre class="language-none"><code class="language-none"># 回退至上个版本
-git reset HEAD^
-# 回退某个文件到上个版本
-git reset HEAD^ [filename]
-# 回退到指定版本并保留当前版本改动
-git reset [commit-id]
-# 舍弃当前版本改动回退至指定版本
-git reset --hard [commit-id]
-# 回退到指定版本并将改动加入暂存区
-git reset --soft [commit-id]
-# 创建一个新的提交回退指定版本的内容(将制定commit-id提交的代码删除并生成一个新的提交)
-git revert [commit-id]</code></pre>
+<h2 id="查看容器"><a href="#查看容器" class="headerlink" title="查看容器"></a>查看容器</h2><pre class="language-none"><code class="language-none"># 列出所有容器
+docker ps -a
+# 仅查看当前正在运行的所有容器
+docker ps
+# 查看最后一次运行的容器
+docker ps -l
+# 查看容器日志
+docker logs Name&#x2F;ID
+# 列出一个容器里面被改变的文件或者目录，list列表会显示出三种事件，A：增加的，D： 删除的，C： 被改变的 
+docker diff Name&#x2F;ID
+# 查看容器进程pid
+docker top Name&#x2F;ID</code></pre>
 
-<h2 id="代码合并"><a href="#代码合并" class="headerlink" title="代码合并"></a>代码合并</h2><pre class="language-none"><code class="language-none"># 将指定分支合并到当前分支, 有冲突需要解决冲突并提交新的commit
-git merge [branch]
-# 将指定分支作为base分支, 先处理冲突后按照时间线将commit合并, 对比merge合并提交的代码更加整洁
-git rebase [branch]
-# 将指定提交合并到当前分支
-git cherry-pick [commit-id]</code></pre>
+<h2 id="启动、停止、杀死一个容器"><a href="#启动、停止、杀死一个容器" class="headerlink" title="启动、停止、杀死一个容器"></a>启动、停止、杀死一个容器</h2><pre class="language-none"><code class="language-none"># 启动容器
+docker start Name&#x2F;ID
+# docker stop，支持“优雅退出”。先发送SIGTERM信号，在一段时间之后（10s）再发送SIGKILL信号。Docker内部的应用程序可以接收SIGTERM信号，然后做一些“退出前工作”，比如保存状态、处理当前请求等。
+# docker kill，发送SIGKILL信号，应用程序直接退出。
+docker stop Name&#x2F;ID
+docker kill Name&#x2F;ID
+# 重启容器
+docker restart Name&#x2F;ID</code></pre>
 
-<h2 id="stash保存及恢复进度"><a href="#stash保存及恢复进度" class="headerlink" title="stash保存及恢复进度"></a>stash保存及恢复进度</h2><pre class="language-none"><code class="language-none"># 清理stash暂存区
-git stash clear
-# 将当前变动代码加入stash暂存区
-git stash 
-# 查看stash暂存区内容
-git stash list 
-# 将最后加入暂存区的内容提取到当前分支, 并从stash暂存区中删除
-git stash pop
-# 弹出stash暂存区中的指定内容
-git stash pop [stash-id]</code></pre>
+<h2 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h2><pre class="language-none"><code class="language-none"># 删除所有容器
+docker rm &#96;docker ps -a -q&#96;
+# 删除单个容器
+docker rm Name&#x2F;ID</code></pre>
 
-<h2 id="git-commit-Angular规范"><a href="#git-commit-Angular规范" class="headerlink" title="git commit Angular规范"></a>git commit Angular规范</h2><p>commit message的规范有助于我们对于提交历史的追溯, 也会让我们在每次提交时更加慎重</p>
-<p>格式如下</p>
-<pre class="language-none"><code class="language-none">&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;</code></pre>
+<h2 id="连接到正在运行中的容器"><a href="#连接到正在运行中的容器" class="headerlink" title="连接到正在运行中的容器"></a>连接到正在运行中的容器</h2><pre class="language-none"><code class="language-none"># --sig-proxy&#x3D;false ：此选项作用是按CTRL-D或CTRL-C不会关闭容器
+docker attach --sig-proxy&#x3D;false Name&#x2F;ID</code></pre>
 
-<ul>
-<li><p>type(必须)</p>
-<p>  用于说明git commit的类别，只允许使用下面的标识。</p>
-</li>
-<li><p>scope(可选)</p>
-<p>  scope用于说明 commit 影响的范围，比如数据层、控制层、视图层等等，视项目不同而不同。</p>
-<p>  例如在Angular，可以是location，browser，compile，compile，rootScope， ngHref，ngClick，ngView等。如果你的修改影响了不止一个scope，你可以使用*代替。</p>
-</li>
-<li><p>subject(必须)</p>
-<p>  subject是commit目的的简短描述，不超过50个字符。</p>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>type选项</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>feat</td>
-<td>新功能（feature）。</td>
-</tr>
-<tr>
-<td>fix/to</td>
-<td>修复bug，可以是QA发现的BUG，也可以是研发自己发现的BUG。</td>
-</tr>
-<tr>
-<td>fix</td>
-<td>产生diff并自动修复此问题。适合于一次提交直接修复问题</td>
-</tr>
-<tr>
-<td>to</td>
-<td>只产生diff不自动修复此问题。适合于多次提交。最终修复问题提交时使用fix</td>
-</tr>
-<tr>
-<td>docs</td>
-<td>文档（documentation）。</td>
-</tr>
-<tr>
-<td>style</td>
-<td>格式（不影响代码运行的变动）。</td>
-</tr>
-<tr>
-<td>refactor</td>
-<td>重构（即不是新增功能，也不是修改bug的代码变动）。</td>
-</tr>
-<tr>
-<td>test</td>
-<td>增加测试。</td>
-</tr>
-<tr>
-<td>chore</td>
-<td>构建过程或辅助工具的变动。</td>
-</tr>
-<tr>
-<td>revert</td>
-<td>回滚到上一个版本。</td>
-</tr>
-<tr>
-<td>merge</td>
-<td>代码合并。</td>
-</tr>
-<tr>
-<td>sync</td>
-<td>同步主线或分支的Bug。</td>
-</tr>
-</tbody></table>
-<p>提交示例</p>
-<pre class="language-none"><code class="language-none">fix(login): 修复账号中有不合法字符导致校验错误
-feat(export): 增加导出功能 </code></pre>
-
+<h2 id="根据容器变动创建新的镜像"><a href="#根据容器变动创建新的镜像" class="headerlink" title="根据容器变动创建新的镜像"></a>根据容器变动创建新的镜像</h2><pre class="language-none"><code class="language-none">docker commit ID new_image_name</code></pre>
+<p>选项说明:<br>-a :提交的镜像作者；<br>-c :使用Dockerfile指令来创建镜像；<br>-m :提交时的说明文字；<br>-p :在commit时，将容器暂停。</p>
+<h2 id="保存和加载镜像"><a href="#保存和加载镜像" class="headerlink" title="保存和加载镜像"></a>保存和加载镜像</h2><pre class="language-none"><code class="language-none"># 保存镜像到一个tar包
+docker save image_name -o file_path
+# 加载一个tar包对象
+docker load -i file_path</code></pre>
                 
             </div>
             <hr/>
@@ -618,7 +501,7 @@ feat(export): 增加导出功能 </code></pre>
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wf1314.github.io/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/">https://wf1314.github.io/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/</a>
+                    <a href="https://wf1314.github.io/posts/17954850-8d67-11ec-8505-fffcfa42a684/">https://wf1314.github.io/posts/17954850-8d67-11ec-8505-fffcfa42a684/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -656,8 +539,8 @@ feat(export): 增加导出功能 </code></pre>
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/git/">
-                                    <span class="chip bg-color">git</span>
+                                <a href="/tags/Docker/">
+                                    <span class="chip bg-color">Docker</span>
                                 </a>
                             
                         </div>
@@ -831,9 +714,10 @@ feat(export): 增加导出功能 </code></pre>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/posts/17954850-8d67-11ec-8505-fffcfa42a684/">
                     <div class="card-image">
@@ -851,9 +735,9 @@ feat(export): 增加导出功能 </code></pre>
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-02-14
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-14
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -866,6 +750,7 @@ feat(export): 增加导出功能 </code></pre>
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -884,31 +769,31 @@ feat(export): 增加导出功能 </code></pre>
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/posts/1bfa13c0-7e9a-11ec-a2eb-93bcbf8a55e3/">
+                <a href="/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Git Pages+Hexo+Matery主题搭建个人博客">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Git常用命令收集">
                         
-                        <span class="card-title">Git Pages+Hexo+Matery主题搭建个人博客</span>
+                        <span class="card-title">Git常用命令收集</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            记录hexo博客搭建的过程已经发布文章的常用命令等
+                            记录git常用命令及commit规范
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-26
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-27
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" class="post-category">
-                                    博客搭建
+                            <a href="/categories/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="post-category">
+                                    常用命令
                                 </a>
                             
                             
@@ -918,12 +803,8 @@ feat(export): 增加导出功能 </code></pre>
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%9A%E5%AE%A2/">
-                        <span class="chip bg-color">博客</span>
-                    </a>
-                    
-                    <a href="/tags/Hexo/">
-                        <span class="chip bg-color">Hexo</span>
+                    <a href="/tags/git/">
+                        <span class="chip bg-color">git</span>
                     </a>
                     
                 </div>
