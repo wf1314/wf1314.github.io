@@ -441,12 +441,13 @@ services:
         - &quot;com.example.department&#x3D;Finance&quot;
         - &quot;com.example.label-with-empty-value&quot;
       target: prod</code></pre>
-<pre><code>- context：上下文路径。
-- dockerfile：指定构建镜像的 Dockerfile 文件名。
-- args：添加构建参数，这是只能在构建过程中访问的环境变量。
-- labels：设置构建镜像的标签。
-- target：多层构建，可以指定构建哪一层。
-</code></pre>
+<ul>
+<li>context：上下文路径。</li>
+<li>dockerfile：指定构建镜像的 Dockerfile 文件名。</li>
+<li>args：添加构建参数，这是只能在构建过程中访问的环境变量。</li>
+<li>labels：设置构建镜像的标签。</li>
+<li>target：多层构建，可以指定构建哪一层。</li>
+</ul>
 <h3 id="cap-add，cap-drop"><a href="#cap-add，cap-drop" class="headerlink" title="cap_add，cap_drop"></a>cap_add，cap_drop</h3><p>添加或删除容器拥有的宿主机的内核功能。</p>
 <pre class="language-none"><code class="language-none">cap_add:
   - ALL # 开启全部权限
@@ -457,7 +458,12 @@ cap_drop:
 <h3 id="cgroup-parent"><a href="#cgroup-parent" class="headerlink" title="cgroup_parent"></a>cgroup_parent</h3><p>为容器指定父 cgroup 组，意味着将继承该组的资源限制。</p>
 <h3 id="command"><a href="#command" class="headerlink" title="command"></a>command</h3><p>覆盖容器启动的默认命令</p>
 <h3 id="container-name"><a href="#container-name" class="headerlink" title="container_name"></a>container_name</h3><p>指定容器名称</p>
-<h3 id="depends-on"><a href="#depends-on" class="headerlink" title="depends_on"></a>depends_on</h3><p>设置依赖关系<br>    - docker-compose up ：以依赖性顺序启动服务。在以下示例中，先启动 db 和 redis ，才会启动 web。<br>    - docker-compose up SERVICE ：自动包含 SERVICE 的依赖项。在以下示例中，docker-compose up web 还将创建并启动 db 和 redis。<br>    - docker-compose stop ：按依赖关系顺序停止服务。在以下示例中，web 在 db 和 redis 之前停止。</p>
+<h3 id="depends-on"><a href="#depends-on" class="headerlink" title="depends_on"></a>depends_on</h3><p>设置依赖关系</p>
+<ul>
+<li>docker-compose up ：以依赖性顺序启动服务。在以下示例中，先启动 db 和 redis ，才会启动 web。</li>
+<li>docker-compose up SERVICE ：自动包含 SERVICE 的依赖项。在以下示例中，docker-compose up web 还将创建并启动 db 和 redis。</li>
+<li>docker-compose stop ：按依赖关系顺序停止服务。在以下示例中，web 在 db 和 redis 之前停止。</li>
+</ul>
 <h3 id="devices"><a href="#devices" class="headerlink" title="devices"></a>devices</h3><p>指定设备映射列表 (等同于 docker run –device 的作用)</p>
 <h3 id="dns"><a href="#dns" class="headerlink" title="dns"></a>dns</h3><p>自定义DNS服务器。可以是单个值或列表。(等同于 docker run –dns 的作用)</p>
 <h3 id="dns-search"><a href="#dns-search" class="headerlink" title="dns_search"></a>dns_search</h3><p>设置 DNS 搜索域(等同于 docker run –dns-search 的作用)</p>
