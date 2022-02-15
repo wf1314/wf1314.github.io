@@ -6,7 +6,7 @@
   <link href="https://wf1314.github.io/atom.xml" rel="self"/>
   
   <link href="https://wf1314.github.io/"/>
-  <updated>2022-02-15T02:47:05.718Z</updated>
+  <updated>2022-02-15T06:51:51.931Z</updated>
   <id>https://wf1314.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Docker Compose使用教程</title>
+    <link href="https://wf1314.github.io/posts/61a3c330-8e21-11ec-a105-f340cf877f8a/"/>
+    <id>https://wf1314.github.io/posts/61a3c330-8e21-11ec-a105-f340cf877f8a/</id>
+    <published>2022-02-15T05:37:36.000Z</published>
+    <updated>2022-02-15T06:51:51.931Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;Compose简介&quot;&gt;&lt;a href=&quot;#Compose简介&quot; class=&quot;headerlink&quot; title=&quot;Compose简介&quot;&gt;&lt;/a&gt;Compose简介&lt;/h2&gt;&lt;p&gt;Compose 是用于定义和运行多容器 Docker 应用程序的工具。通过</summary>
+        
+      
+    
+    
+    
+    <category term="运维" scheme="https://wf1314.github.io/categories/%E8%BF%90%E7%BB%B4/"/>
+    
+    
+    <category term="Docker" scheme="https://wf1314.github.io/tags/Docker/"/>
+    
+  </entry>
   
   <entry>
     <title>Docker常用命令</title>
