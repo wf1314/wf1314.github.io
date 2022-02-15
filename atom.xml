@@ -6,7 +6,7 @@
   <link href="https://wf1314.github.io/atom.xml" rel="self"/>
   
   <link href="https://wf1314.github.io/"/>
-  <updated>2022-02-15T06:54:14.337Z</updated>
+  <updated>2022-02-15T07:11:05.818Z</updated>
   <id>https://wf1314.github.io/</id>
   
   <author>
@@ -21,14 +21,15 @@
     <link href="https://wf1314.github.io/posts/61a3c330-8e21-11ec-a105-f340cf877f8a/"/>
     <id>https://wf1314.github.io/posts/61a3c330-8e21-11ec-a105-f340cf877f8a/</id>
     <published>2022-02-15T05:37:36.000Z</published>
-    <updated>2022-02-15T06:54:14.337Z</updated>
+    <updated>2022-02-15T07:11:05.818Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;Compose简介&quot;&gt;&lt;a href=&quot;#Compose简介&quot; class=&quot;headerlink&quot; title=&quot;Compose简介&quot;&gt;&lt;/a&gt;Compose简介&lt;/h2&gt;&lt;p&gt;Compose 是用于定义和运行多容器 Docker 应用程序的工具。通过</summary>
+    <summary type="html">&lt;p&gt;本文参考自 &lt;a href=&quot;https://www.runoob.com/docker/docker-compose.html&quot;&gt;https://www.runoob.com/docker/docker-compose.html&lt;/a&gt;&lt;/p&gt;
+&lt;h2</summary>
         
       
     

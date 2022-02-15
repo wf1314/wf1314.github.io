@@ -493,7 +493,8 @@ tags:
   <entry>
     <title>Docker Compose使用教程</title>
     <url>/posts/61a3c330-8e21-11ec-a105-f340cf877f8a/</url>
-    <content><![CDATA[<h2 id="Compose简介"><a href="#Compose简介" class="headerlink" title="Compose简介"></a>Compose简介</h2><p>Compose 是用于定义和运行多容器 Docker 应用程序的工具。通过 Compose，您可以使用 YML 文件来配置应用程序需要的所有服务。然后，使用一个命令，就可以从 YML 文件配置中创建并启动所有服务。</p>
+    <content><![CDATA[<p>本文参考自 <a href="https://www.runoob.com/docker/docker-compose.html">https://www.runoob.com/docker/docker-compose.html</a></p>
+<h2 id="Compose简介"><a href="#Compose简介" class="headerlink" title="Compose简介"></a>Compose简介</h2><p>Compose 是用于定义和运行多容器 Docker 应用程序的工具。通过 Compose，您可以使用 YML 文件来配置应用程序需要的所有服务。然后，使用一个命令，就可以从 YML 文件配置中创建并启动所有服务。</p>
 <p>应用场景:</p>
 <p>比如一个web服务包含web应用程序, 数据库等等, 我们本地构建一个web应用程序Dockfile, 再构建一个数据库Dockfile, 通过Compose可以将两个服务在隔离环境中一起运行</p>
 <h2 id="docker-compose-yml-配置指令参考"><a href="#docker-compose-yml-配置指令参考" class="headerlink" title="docker-compose.yml 配置指令参考"></a>docker-compose.yml 配置指令参考</h2><h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><p>指定本 yml 依从的 compose 哪个版本制定的。</p>
