@@ -1,75 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Docker常用命令</title>
-    <url>/posts/17954850-8d67-11ec-8505-fffcfa42a684/</url>
-    <content><![CDATA[<h2 id="Dockerhub-搜索下载远程镜像"><a href="#Dockerhub-搜索下载远程镜像" class="headerlink" title="Dockerhub 搜索下载远程镜像"></a>Dockerhub 搜索下载远程镜像</h2><pre class="language-none"><code class="language-none"># 搜索
-docker search ImageName
-# 下载
-docker pull ImageName 或 docker pull ImageName:VersionNumber</code></pre>
-
-<h2 id="查看本地镜像"><a href="#查看本地镜像" class="headerlink" title="查看本地镜像"></a>查看本地镜像</h2><pre class="language-none"><code class="language-none">docker images [OPTIONS] [REPOSITORY[:TAG]]</code></pre>
-
-<p>OPTIONS说明：</p>
-<p>-a :列出本地所有的镜像（含中间映像层，默认情况下，过滤掉中间映像层）；<br>–digests :显示镜像的摘要信息；<br>-f :显示满足条件的镜像；<br>–format :指定返回值的模板文件；<br>–no-trunc :显示完整的镜像信息；<br>-q :只显示镜像ID。</p>
-<h2 id="删除本地镜像"><a href="#删除本地镜像" class="headerlink" title="删除本地镜像"></a>删除本地镜像</h2><pre class="language-none"><code class="language-none">docker rmi ImageName
-docker rmi ImageName:VersionNumber</code></pre>
-
-<h2 id="Dockerfile本地构建容器"><a href="#Dockerfile本地构建容器" class="headerlink" title="Dockerfile本地构建容器"></a>Dockerfile本地构建容器</h2><pre class="language-none"><code class="language-none">docker build -t image_name Dockerfile_path</code></pre>
-<p>常用选项说明：</p>
-<p>–build-arg=[] :设置镜像创建时的变量；<br>–cpu-shares :设置 cpu 使用权重；<br>–cpu-period :限制 CPU CFS周期；<br>–cpu-quota :限制 CPU CFS配额；<br>–cpuset-cpus :指定使用的CPU id；<br>–cpuset-mems :指定使用的内存 id；<br>–disable-content-trust :忽略校验，默认开启；<br>-f :指定要使用的Dockerfile路径；<br>–force-rm :设置镜像过程中删除中间容器；<br>–isolation :使用容器隔离技术；<br>–label=[] :设置镜像使用的元数据；<br>-m :设置内存最大值；<br>–memory-swap :设置Swap的最大值为内存+swap，”-1”表示不限swap；<br>–no-cache :创建镜像的过程不使用缓存；<br>–pull :尝试去更新镜像的新版本；<br>–quiet, -q :安静模式，成功后只输出镜像 ID；<br>–rm :设置镜像成功后删除中间容器；<br>–shm-size :设置/dev/shm的大小，默认值是64M；<br>–ulimit :Ulimit配置。<br>–squash :将 Dockerfile 中所有的操作压缩为一层。<br>–tag, -t: 镜像的名字及标签，通常 name:tag 或者 name 格式；可以在一次构建中为一个镜像设置多个标签。<br>–network: 默认 default。在构建期间设置RUN指令的网络模式</p>
-<h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><pre class="language-none"><code class="language-none"># 启动容器，如果本地没有要启动的镜像，会自动下载,每次新建一个容器
-docker run ImageName
-# 只是单纯的启动。不会新建容器
-docker start Name or ID
-# 交互是进入容器
-docker run -it ImageName &#x2F;bin&#x2F;bash</code></pre>
-<p>常用选项说明：</p>
-<p>-a stdin: 指定标准输入输出内容类型，可选 STDIN/STDOUT/STDERR 三项；<br>-d: 后台运行容器，并返回容器ID；<br>-i: 以交互模式运行容器，通常与 -t 同时使用；<br>-P: 随机端口映射，容器内部端口随机映射到主机的端口<br>-p: 指定端口映射，格式为：主机(宿主)端口:容器端口<br>-t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用；<br>–name=”nginx-lb”: 为容器指定一个名称；<br>–dns 8.8.8.8: 指定容器使用的DNS服务器，默认和宿主一致；<br>–dns-search example.com: 指定容器DNS搜索域名，默认和宿主一致；<br>-h “mars”: 指定容器的hostname；<br>-e username=”ritchie”: 设置环境变量；<br>–env-file=[]: 从指定文件读入环境变量；<br>–cpuset=”0-2” or –cpuset=”0,1,2”: 绑定容器到指定CPU运行；<br>-m :设置容器使用内存最大值；<br>–net=”bridge”: 指定容器的网络连接类型，支持 bridge/host/none/container: 四种类型；<br>–expose=[]: 开放一个端口或一组端口；<br>–volume , -v: 绑定一个卷</p>
-<h2 id="查看容器"><a href="#查看容器" class="headerlink" title="查看容器"></a>查看容器</h2><pre class="language-none"><code class="language-none"># 列出所有容器
-docker ps -a
-# 仅查看当前正在运行的所有容器
-docker ps
-# 查看最后一次运行的容器
-docker ps -l
-# 查看容器日志
-docker logs Name&#x2F;ID
-# 列出一个容器里面被改变的文件或者目录，list列表会显示出三种事件，A：增加的，D： 删除的，C： 被改变的 
-docker diff Name&#x2F;ID
-# 查看容器进程pid
-docker top Name&#x2F;ID</code></pre>
-
-<h2 id="启动、停止、杀死一个容器"><a href="#启动、停止、杀死一个容器" class="headerlink" title="启动、停止、杀死一个容器"></a>启动、停止、杀死一个容器</h2><pre class="language-none"><code class="language-none"># 启动容器
-docker start Name&#x2F;ID
-# docker stop，支持“优雅退出”。先发送SIGTERM信号，在一段时间之后（10s）再发送SIGKILL信号。Docker内部的应用程序可以接收SIGTERM信号，然后做一些“退出前工作”，比如保存状态、处理当前请求等。
-# docker kill，发送SIGKILL信号，应用程序直接退出。
-docker stop Name&#x2F;ID
-docker kill Name&#x2F;ID
-# 重启容器
-docker restart Name&#x2F;ID</code></pre>
-
-<h2 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h2><pre class="language-none"><code class="language-none"># 删除所有容器
-docker rm &#96;docker ps -a -q&#96;
-# 删除单个容器
-docker rm Name&#x2F;ID</code></pre>
-
-<h2 id="连接到正在运行中的容器"><a href="#连接到正在运行中的容器" class="headerlink" title="连接到正在运行中的容器"></a>连接到正在运行中的容器</h2><pre class="language-none"><code class="language-none"># --sig-proxy&#x3D;false ：此选项作用是按CTRL-D或CTRL-C不会关闭容器
-docker attach --sig-proxy&#x3D;false Name&#x2F;ID</code></pre>
-
-<h2 id="根据容器变动创建新的镜像"><a href="#根据容器变动创建新的镜像" class="headerlink" title="根据容器变动创建新的镜像"></a>根据容器变动创建新的镜像</h2><pre class="language-none"><code class="language-none">docker commit ID new_image_name</code></pre>
-<p>选项说明:<br>-a :提交的镜像作者；<br>-c :使用Dockerfile指令来创建镜像；<br>-m :提交时的说明文字；<br>-p :在commit时，将容器暂停。</p>
-<h2 id="保存和加载镜像"><a href="#保存和加载镜像" class="headerlink" title="保存和加载镜像"></a>保存和加载镜像</h2><pre class="language-none"><code class="language-none"># 保存镜像到一个tar包
-docker save image_name -o file_path
-# 加载一个tar包对象
-docker load -i file_path</code></pre>]]></content>
-      <categories>
-        <category>常用命令</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Git常用命令收集</title>
     <url>/posts/f9c13f40-7f52-11ec-8b0d-2f0f3094676b/</url>
     <content><![CDATA[<h2 id="远程仓库拉取代码"><a href="#远程仓库拉取代码" class="headerlink" title="远程仓库拉取代码"></a>远程仓库拉取代码</h2><pre class="language-none"><code class="language-none"># 拉取一个项目和它的整个代码历史
@@ -252,6 +183,107 @@ feat(export): 增加导出功能 </code></pre>
       </categories>
       <tags>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker常用命令</title>
+    <url>/posts/17954850-8d67-11ec-8505-fffcfa42a684/</url>
+    <content><![CDATA[<h2 id="Dockerhub-搜索下载远程镜像"><a href="#Dockerhub-搜索下载远程镜像" class="headerlink" title="Dockerhub 搜索下载远程镜像"></a>Dockerhub 搜索下载远程镜像</h2><pre class="language-none"><code class="language-none"># 搜索
+docker search ImageName
+# 下载
+docker pull ImageName 或 docker pull ImageName:VersionNumber</code></pre>
+
+<h2 id="查看本地镜像"><a href="#查看本地镜像" class="headerlink" title="查看本地镜像"></a>查看本地镜像</h2><pre class="language-none"><code class="language-none">docker images [OPTIONS] [REPOSITORY[:TAG]]</code></pre>
+
+<p>OPTIONS说明：</p>
+<p>-a :列出本地所有的镜像（含中间映像层，默认情况下，过滤掉中间映像层）；<br>–digests :显示镜像的摘要信息；<br>-f :显示满足条件的镜像；<br>–format :指定返回值的模板文件；<br>–no-trunc :显示完整的镜像信息；<br>-q :只显示镜像ID。</p>
+<h2 id="删除本地镜像"><a href="#删除本地镜像" class="headerlink" title="删除本地镜像"></a>删除本地镜像</h2><pre class="language-none"><code class="language-none">docker rmi ImageName
+docker rmi ImageName:VersionNumber</code></pre>
+
+<h2 id="Dockerfile本地构建容器"><a href="#Dockerfile本地构建容器" class="headerlink" title="Dockerfile本地构建容器"></a>Dockerfile本地构建容器</h2><pre class="language-none"><code class="language-none">docker build -t image_name Dockerfile_path</code></pre>
+<p>常用选项说明：</p>
+<p>–build-arg=[] :设置镜像创建时的变量；<br>–cpu-shares :设置 cpu 使用权重；<br>–cpu-period :限制 CPU CFS周期；<br>–cpu-quota :限制 CPU CFS配额；<br>–cpuset-cpus :指定使用的CPU id；<br>–cpuset-mems :指定使用的内存 id；<br>–disable-content-trust :忽略校验，默认开启；<br>-f :指定要使用的Dockerfile路径；<br>–force-rm :设置镜像过程中删除中间容器；<br>–isolation :使用容器隔离技术；<br>–label=[] :设置镜像使用的元数据；<br>-m :设置内存最大值；<br>–memory-swap :设置Swap的最大值为内存+swap，”-1”表示不限swap；<br>–no-cache :创建镜像的过程不使用缓存；<br>–pull :尝试去更新镜像的新版本；<br>–quiet, -q :安静模式，成功后只输出镜像 ID；<br>–rm :设置镜像成功后删除中间容器；<br>–shm-size :设置/dev/shm的大小，默认值是64M；<br>–ulimit :Ulimit配置。<br>–squash :将 Dockerfile 中所有的操作压缩为一层。<br>–tag, -t: 镜像的名字及标签，通常 name:tag 或者 name 格式；可以在一次构建中为一个镜像设置多个标签。<br>–network: 默认 default。在构建期间设置RUN指令的网络模式</p>
+<h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><pre class="language-none"><code class="language-none"># 启动容器，如果本地没有要启动的镜像，会自动下载,每次新建一个容器
+docker run ImageName
+# 只是单纯的启动。不会新建容器
+docker start Name or ID
+# 交互是进入容器
+docker run -it ImageName &#x2F;bin&#x2F;bash</code></pre>
+<p>常用选项说明：</p>
+<p>-a stdin: 指定标准输入输出内容类型，可选 STDIN/STDOUT/STDERR 三项；<br>-d: 后台运行容器，并返回容器ID；<br>-i: 以交互模式运行容器，通常与 -t 同时使用；<br>-P: 随机端口映射，容器内部端口随机映射到主机的端口<br>-p: 指定端口映射，格式为：主机(宿主)端口:容器端口<br>-t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用；<br>–name=”nginx-lb”: 为容器指定一个名称；<br>–dns 8.8.8.8: 指定容器使用的DNS服务器，默认和宿主一致；<br>–dns-search example.com: 指定容器DNS搜索域名，默认和宿主一致；<br>-h “mars”: 指定容器的hostname；<br>-e username=”ritchie”: 设置环境变量；<br>–env-file=[]: 从指定文件读入环境变量；<br>–cpuset=”0-2” or –cpuset=”0,1,2”: 绑定容器到指定CPU运行；<br>-m :设置容器使用内存最大值；<br>–net=”bridge”: 指定容器的网络连接类型，支持 bridge/host/none/container: 四种类型；<br>–expose=[]: 开放一个端口或一组端口；<br>–volume , -v: 绑定一个卷</p>
+<h2 id="查看容器"><a href="#查看容器" class="headerlink" title="查看容器"></a>查看容器</h2><pre class="language-none"><code class="language-none"># 列出所有容器
+docker ps -a
+# 仅查看当前正在运行的所有容器
+docker ps
+# 查看最后一次运行的容器
+docker ps -l
+# 查看容器日志
+docker logs Name&#x2F;ID
+# 列出一个容器里面被改变的文件或者目录，list列表会显示出三种事件，A：增加的，D： 删除的，C： 被改变的 
+docker diff Name&#x2F;ID
+# 查看容器进程pid
+docker top Name&#x2F;ID</code></pre>
+
+<h2 id="启动、停止、杀死一个容器"><a href="#启动、停止、杀死一个容器" class="headerlink" title="启动、停止、杀死一个容器"></a>启动、停止、杀死一个容器</h2><pre class="language-none"><code class="language-none"># 启动容器
+docker start Name&#x2F;ID
+# docker stop，支持“优雅退出”。先发送SIGTERM信号，在一段时间之后（10s）再发送SIGKILL信号。Docker内部的应用程序可以接收SIGTERM信号，然后做一些“退出前工作”，比如保存状态、处理当前请求等。
+# docker kill，发送SIGKILL信号，应用程序直接退出。
+docker stop Name&#x2F;ID
+docker kill Name&#x2F;ID
+# 重启容器
+docker restart Name&#x2F;ID</code></pre>
+
+<h2 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h2><pre class="language-none"><code class="language-none"># 删除所有容器
+docker rm &#96;docker ps -a -q&#96;
+# 删除单个容器
+docker rm Name&#x2F;ID</code></pre>
+
+<h2 id="连接到正在运行中的容器"><a href="#连接到正在运行中的容器" class="headerlink" title="连接到正在运行中的容器"></a>连接到正在运行中的容器</h2><pre class="language-none"><code class="language-none"># --sig-proxy&#x3D;false ：此选项作用是按CTRL-D或CTRL-C不会关闭容器
+docker attach --sig-proxy&#x3D;false Name&#x2F;ID</code></pre>
+
+<h2 id="根据容器变动创建新的镜像"><a href="#根据容器变动创建新的镜像" class="headerlink" title="根据容器变动创建新的镜像"></a>根据容器变动创建新的镜像</h2><pre class="language-none"><code class="language-none">docker commit ID new_image_name</code></pre>
+<p>常用选项说明:<br>-a :提交的镜像作者；<br>-c :使用Dockerfile指令来创建镜像；<br>-m :提交时的说明文字；<br>-p :在commit时，将容器暂停。</p>
+<h2 id="保存和加载镜像"><a href="#保存和加载镜像" class="headerlink" title="保存和加载镜像"></a>保存和加载镜像</h2><pre class="language-none"><code class="language-none"># 保存镜像到一个tar包
+docker save image_name -o file_path
+# 加载一个tar包对象
+docker load -i file_path</code></pre>
+
+<h1 id="Dockefile-指令说明"><a href="#Dockefile-指令说明" class="headerlink" title="Dockefile 指令说明"></a>Dockefile 指令说明</h1><ul>
+<li><p>FROM<br>构建镜像基于哪个镜像</p>
+</li>
+<li><p>MAINTAINER<br>镜像维护者姓名或邮箱地址</p>
+</li>
+<li><p>RUN<br>构建镜像时运行的指令</p>
+</li>
+<li><p>CMD<br>运行容器时执行的shell环境</p>
+</li>
+<li><p>VOLUME<br>指定容器挂载点到宿主机自动生成的目录或其他容器</p>
+</li>
+<li><p>USER<br>为RUN、CMD、和 ENTRYPOINT 执行命令指定运行用户</p>
+</li>
+<li><p>WORKDIR<br>为 RUN、CMD、ENTRYPOINT、COPY 和 ADD 设置工作目录，就是切换目录</p>
+</li>
+<li><p>HEALTHCHECH<br>健康检查</p>
+</li>
+<li><p>ARG<br>构建时指定的一些参数</p>
+</li>
+<li><p>EXPOSE<br>声明容器的服务端口（仅仅是声明）</p>
+</li>
+<li><p>ENV<br>设置容器环境变量</p>
+</li>
+<li><p>ADD<br>拷贝文件或目录到容器中，如果是URL或压缩包便会自动下载或自动解压</p>
+</li>
+<li><p>COPY<br>拷贝文件或目录到容器中，跟ADD类似，但不具备自动下载或解压的功能</p>
+</li>
+<li><p>ENTRYPOINT<br>运行容器时执行的shell命令</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>常用命令</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
