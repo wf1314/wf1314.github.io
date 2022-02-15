@@ -393,7 +393,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    724
+                    1.2k
                 </div>
                 
 
@@ -431,15 +431,16 @@ docker pull ImageName 或 docker pull ImageName:VersionNumber</code></pre>
 docker rmi ImageName:VersionNumber</code></pre>
 
 <h2 id="Dockerfile本地构建容器"><a href="#Dockerfile本地构建容器" class="headerlink" title="Dockerfile本地构建容器"></a>Dockerfile本地构建容器</h2><pre class="language-none"><code class="language-none">docker build -t image_name Dockerfile_path</code></pre>
-<p>选项说明：</p>
-<p>–build-arg=[]：设置镜像创建时的变量；<br>–cpu-shares：设置 cpu 使用权重；<br>–cpu-period：限制 CPU CFS周期；<br>–cpu-quota：限制 CPU CFS配额；<br>–cpuset-cpus：指定使用的CPU id；<br>–cpuset-mems：指定使用的内存 id；<br>–disable-content-trust：忽略校验，默认开启；<br>-f：指定要使用的Dockerfile路径；<br>–force-rm：设置镜像过程中删除中间容器；<br>–isolation：使用容器隔离技术；<br>–label=[]：设置镜像使用的元数据；<br>-m：设置内存最大值；</p>
+<p>常用选项说明：</p>
+<p>–build-arg=[] :设置镜像创建时的变量；<br>–cpu-shares :设置 cpu 使用权重；<br>–cpu-period :限制 CPU CFS周期；<br>–cpu-quota :限制 CPU CFS配额；<br>–cpuset-cpus :指定使用的CPU id；<br>–cpuset-mems :指定使用的内存 id；<br>–disable-content-trust :忽略校验，默认开启；<br>-f :指定要使用的Dockerfile路径；<br>–force-rm :设置镜像过程中删除中间容器；<br>–isolation :使用容器隔离技术；<br>–label=[] :设置镜像使用的元数据；<br>-m :设置内存最大值；<br>–memory-swap :设置Swap的最大值为内存+swap，”-1”表示不限swap；<br>–no-cache :创建镜像的过程不使用缓存；<br>–pull :尝试去更新镜像的新版本；<br>–quiet, -q :安静模式，成功后只输出镜像 ID；<br>–rm :设置镜像成功后删除中间容器；<br>–shm-size :设置/dev/shm的大小，默认值是64M；<br>–ulimit :Ulimit配置。<br>–squash :将 Dockerfile 中所有的操作压缩为一层。<br>–tag, -t: 镜像的名字及标签，通常 name:tag 或者 name 格式；可以在一次构建中为一个镜像设置多个标签。<br>–network: 默认 default。在构建期间设置RUN指令的网络模式</p>
 <h2 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h2><pre class="language-none"><code class="language-none"># 启动容器，如果本地没有要启动的镜像，会自动下载,每次新建一个容器
 docker run ImageName
 # 只是单纯的启动。不会新建容器
 docker start Name or ID
 # 交互是进入容器
 docker run -it ImageName &#x2F;bin&#x2F;bash</code></pre>
-
+<p>常用选项说明：</p>
+<p>-a stdin: 指定标准输入输出内容类型，可选 STDIN/STDOUT/STDERR 三项；<br>-d: 后台运行容器，并返回容器ID；<br>-i: 以交互模式运行容器，通常与 -t 同时使用；<br>-P: 随机端口映射，容器内部端口随机映射到主机的端口<br>-p: 指定端口映射，格式为：主机(宿主)端口:容器端口<br>-t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用；<br>–name=”nginx-lb”: 为容器指定一个名称；<br>–dns 8.8.8.8: 指定容器使用的DNS服务器，默认和宿主一致；<br>–dns-search example.com: 指定容器DNS搜索域名，默认和宿主一致；<br>-h “mars”: 指定容器的hostname；<br>-e username=”ritchie”: 设置环境变量；<br>–env-file=[]: 从指定文件读入环境变量；<br>–cpuset=”0-2” or –cpuset=”0,1,2”: 绑定容器到指定CPU运行；<br>-m :设置容器使用内存最大值；<br>–net=”bridge”: 指定容器的网络连接类型，支持 bridge/host/none/container: 四种类型；<br>–expose=[]: 开放一个端口或一组端口；<br>–volume , -v: 绑定一个卷</p>
 <h2 id="查看容器"><a href="#查看容器" class="headerlink" title="查看容器"></a>查看容器</h2><pre class="language-none"><code class="language-none"># 列出所有容器
 docker ps -a
 # 仅查看当前正在运行的所有容器
