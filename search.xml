@@ -693,4 +693,59 @@ services:
         <tag>Docker</tag>
       </tags>
   </entry>
+  <entry>
+    <title>解决node.js mysql客户端不支持认证协议引发的“ER_NOT_SUPPORTED_AUTH_MODE”问题</title>
+    <url>/posts/35c7b920-8f06-11ec-ade8-474d01fc45a2/</url>
+    <content><![CDATA[<h2 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h2><p>当我在使用node的sequelize连接mysql8.0数据库时发生以下异常:</p>
+<pre class="language-none"><code class="language-none">at Socket.emit (node:events:394:28)
+    at addChunk (node:internal&#x2F;streams&#x2F;readable:315:12)
+    at readableAddChunk (node:internal&#x2F;streams&#x2F;readable:289:9)
+    at Socket.Readable.push (node:internal&#x2F;streams&#x2F;readable:228:10)
+    at TCP.onStreamRead (node:internal&#x2F;stream_base_commons:199:23) &#123;
+  code: &#39;ER_NOT_SUPPORTED_AUTH_MODE&#39;,
+  errno: 1251,
+  sqlState: &#39;08004&#39;,
+  sqlMessage: &#39;Client does not support authentication protocol requested by server; consider upgrading MySQL client&#39;
+&#125;,
+original: Error: Client does not support authentication protocol requested by server; consider upgrading MySQL client
+</code></pre>
+
+<h2 id="报错原因"><a href="#报错原因" class="headerlink" title="报错原因"></a>报错原因</h2><p>Node最新的mysql模块并未完全支持MySQL 8的“caching_sha2_password”加密方式，而“caching_sha2_password”在MySQL 8中是默认的加密方式。因此，下面的方式命令是默认已经使用了“caching_sha2_password”加密方式，该账号对应的密码无法在Node mysql模块下被识别。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>修改用户密码的加密方式</p>
+<p>查询对应用户的host及plugin</p>
+<pre class="language-none"><code class="language-none">mysql&gt; select user,host, plugin from mysql.user;
++------------------+------+-----------------------+
+| user             | host | plugin                |
++------------------+------+-----------------------+
+|                  |      | caching_sha2_password |
+| mysql.infoschema | %    | caching_sha2_password |
+| mysql.session    | %    | caching_sha2_password |
+| mysql.sys        | %    | caching_sha2_password |
+| root             | %    | caching_sha2_password |
++------------------+------+-----------------------+</code></pre>
+<p>从查询结果中可以看出root用户使用了caching_sha2_password方式加密密码, 将其修改为Node mysql支持的mysql_native_password方式</p>
+<pre class="language-none"><code class="language-none"># root为待连接的用户, % 需要根据上方sql语句的host查询结果录入, 一般为localhost或%
+mysql&gt; ALTER USER &#39;root&#39;@&#39;%&#39; IDENTIFIED WITH mysql_native_password BY &#39;密码&#39;;
+Query OK, 0 rows affected (0.12 sec)</code></pre>
+<p>修改完成后重新查询:</p>
+<pre class="language-none"><code class="language-none">mysql&gt; select user,host, plugin from mysql.user;
++------------------+------+-----------------------+
+| user             | host | plugin                |
++------------------+------+-----------------------+
+|                  |      | caching_sha2_password |
+| mysql.infoschema | %    | caching_sha2_password |
+| mysql.session    | %    | caching_sha2_password |
+| mysql.sys        | %    | caching_sha2_password |
+| root             | %    | mysql_native_password |
++------------------+------+-----------------------+</code></pre>
+<p>root用户对应的plugin被改为了mysql_native_password, 重新运行Node代码即可</p>
+]]></content>
+      <categories>
+        <category>问题解决</category>
+      </categories>
+      <tags>
+        <tag>Node</tag>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
 </search>
