@@ -6,7 +6,7 @@
   <link href="https://wf1314.github.io/atom.xml" rel="self"/>
   
   <link href="https://wf1314.github.io/"/>
-  <updated>2022-02-16T09:21:43.422Z</updated>
+  <updated>2022-02-17T02:49:36.632Z</updated>
   <id>https://wf1314.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mac系统安装Mongodb</title>
+    <link href="https://wf1314.github.io/posts/f428d380-8f98-11ec-9ada-65442556c6db/"/>
+    <id>https://wf1314.github.io/posts/f428d380-8f98-11ec-9ada-65442556c6db/</id>
+    <published>2022-02-17T02:26:03.000Z</published>
+    <updated>2022-02-17T02:49:36.632Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;官方教程&quot;&gt;&lt;a href=&quot;#官方教程&quot; class=&quot;headerlink&quot; title=&quot;官方教程&quot;&gt;&lt;/a&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="问题解决" scheme="https://wf1314.github.io/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/"/>
+    
+    
+    <category term="Mongo" scheme="https://wf1314.github.io/tags/Mongo/"/>
+    
+  </entry>
   
   <entry>
     <title>解决node.js mysql客户端不支持认证协议引发的“ER_NOT_SUPPORTED_AUTH_MODE”问题</title>
