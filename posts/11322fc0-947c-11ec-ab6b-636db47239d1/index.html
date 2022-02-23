@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Mac系统安装Mongodb, fwwf的个人博客">
-    <meta name="description" content="记录Mac系统安装Mongodb过程中踩下的坑">
+    <meta name="keywords" content="Minio安装及使用教程, fwwf的个人博客">
+    <meta name="description" content="Minio是一个高性能对象存储开源项目, 社区完善, 学习成本低">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Mac系统安装Mongodb | fwwf的个人博客</title>
+    <title>Minio安装及使用教程 | fwwf的个人博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -238,12 +238,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Mac系统安装Mongodb</h1>
+                    <h1 class="description center-align post-title">Minio安装及使用教程</h1>
                 </div>
             </div>
         </div>
@@ -359,8 +359,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Mongo/">
-                                <span class="chip bg-color">Mongo</span>
+                            <a href="/tags/Minio/">
+                                <span class="chip bg-color">Minio</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8/">
+                                <span class="chip bg-color">对象存储</span>
                             </a>
                         
                     </div>
@@ -371,8 +375,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" class="post-category">
-                                问题解决
+                            <a href="/categories/Minio/" class="post-category">
+                                Minio
                             </a>
                         
                     </div>
@@ -384,7 +388,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-02-17
+                    2022-02-23
                 </div>
                 
 
@@ -393,7 +397,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    709
+                    557
                 </div>
                 
 
@@ -418,58 +422,65 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="官方教程"><a href="#官方教程" class="headerlink" title="官方教程"></a><a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/">官方教程</a></h2><h2 id="安装前准备"><a href="#安装前准备" class="headerlink" title="安装前准备"></a>安装前准备</h2><p>Mac系统安装Mongodb 需要先安装 xcode 和 Homebrew </p>
-<h2 id="安装命令"><a href="#安装命令" class="headerlink" title="安装命令"></a>安装命令</h2><pre class="language-none"><code class="language-none">brew tap mongodb&#x2F;brew 
+                <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>最近在做一个AI模型管理后台的项目, 数据集的存储是首先要考虑的问题, 初步制定方案为:前端传递数据集给后端, 后端将数据集存储至类似阿里云的oss对象存储服务。 项目初期为降低研发成本初步考虑开源的对象存储应用, 最终决定使用MiniO存储文件。</p>
+<p>MiniO拥有足够详细的文档及完备的技术社区, 可以使用官方docker直接进行部署,具备Python SDK, 这对于并不精通此类技术的我而言具有足够的诱惑力。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.min.io/docs/">MiniO英文文档</a></p>
+<p><a target="_blank" rel="noopener" href="http://docs.minio.org.cn/docs/">MiniO中文文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://play.min.io/">MiniO演示地址</a> 账号:Q3AM3UQ867SPQQA43P2F 密码: zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG</p>
+<p>注意! 中文文档可能落后于Minio实际版本, 本人最开始根据中文文档中的Docker命令运行Minio服务端以及Python SDK, 得到了与预期不一致的运行结果, 之后查看英文文档后发现与中文文档中的很多内容不一致!</p>
+<h2 id="Mac-系统下-Docker运行Minio"><a href="#Mac-系统下-Docker运行Minio" class="headerlink" title="Mac 系统下 Docker运行Minio"></a>Mac 系统下 Docker运行Minio</h2><pre class="language-none"><code class="language-none"># 创建用于存储数据的文件
+mkdir -p ~&#x2F;minio&#x2F;data   
+# MINIO_ROOT_USER, MINIO_ROOT_PASSWORD为MiniO页面账号密码, 同时也是api的access_key, secret_key
+docker run \
+  -p 9000:9000 \
+  -p 9001:9001 \
+  --name minio1 \
+  -v ~&#x2F;minio&#x2F;data:&#x2F;data \
+  -e &quot;MINIO_ROOT_USER&#x3D;AKIAIOSFODNN7EXAMPLE&quot; \
+  -e &quot;MINIO_ROOT_PASSWORD&#x3D;wJalrXUtnFEMI&#x2F;K7MDENG&#x2F;bPxRfiCYEXAMPLEKEY&quot; \
+  quay.io&#x2F;minio&#x2F;minio server &#x2F;data --console-address &quot;:9001&quot;</code></pre>
 
-brew install mongodb-community</code></pre>
+<h2 id="Python-上传文件至Minio服务端"><a href="#Python-上传文件至Minio服务端" class="headerlink" title="Python 上传文件至Minio服务端"></a>Python 上传文件至Minio服务端</h2><pre class="language-none"><code class="language-none">from minio import Minio
+from minio.error import S3Error
 
-<p>在执行brew install mongodb-community命令时遇到以下error</p>
-<pre class="language-none"><code class="language-none">Error: No such file or directory @ rb_sysopen - &#x2F;Users&#x2F;wangf&#x2F;Library&#x2F;Caches&#x2F;Homebrew&#x2F;downloads&#x2F;ad28f9ae10bede899e85ae4f9940bb929ff67e4c5be20c2efdccb7fb9e1e36b0--node@14-14.17.6.big_sur.bottle.tar.gz</code></pre>
-<p>别慌, 是依赖包下载失败, 单独下载对应依赖</p>
-<pre class="language-none"><code class="language-none">brew install node@14</code></pre>
 
-<h2 id="检查是否安装完成"><a href="#检查是否安装完成" class="headerlink" title="检查是否安装完成"></a>检查是否安装完成</h2><pre class="language-none"><code class="language-none">mongod -version</code></pre>
+def main():
+    # 创建MiniO client对象, access_key, secret_key为Docker启动时指定的值
+    # 端口号为第一个-p指定的值
+    client &#x3D; Minio(
+        &quot;127.0.0.1:9000&quot;,
+        access_key&#x3D;&quot;AKIAIOSFODNN7EXAMPLE&quot;,
+        secret_key&#x3D;&quot;wJalrXUtnFEMI&#x2F;K7MDENG&#x2F;bPxRfiCYEXAMPLEKEY&quot;,
+        secure&#x3D;False  # False时使用HTTP, True时使用HTTPS
+    )
 
-<h2 id="启动mongo"><a href="#启动mongo" class="headerlink" title="启动mongo"></a>启动mongo</h2><pre class="language-none"><code class="language-none">brew services start mongodb-community
+    # 判断数据通是否存在, 不存在则创建
+    found &#x3D; client.bucket_exists(&quot;asiatrip&quot;)
+    if not found:
+        client.make_bucket(&quot;asiatrip&quot;)
+    else:
+        print(&quot;asiatrip数据桶创建成功&quot;)
 
-&#x3D;&#x3D;&gt; Successfully started &#96;mongodb-community&#96; (label: homebrew.mxcl.mongodb-community)</code></pre>
-<p>提示运行成功后检查是否运行成功</p>
-<pre class="language-none"><code class="language-none">ps aux | grep -v grep | grep mongod</code></pre>
-<p>离谱的事情发生了, 启动命令明明提示成功但却没找到mongod的进程, 尝试执行mongo命令运行mongo命令行客户端, 运行失败得到以下提示:</p>
-<pre class="language-none"><code class="language-none">connecting to: mongodb:&#x2F;&#x2F;127.0.0.1:27017&#x2F;?compressors&#x3D;disabled&amp;gssapiServiceName&#x3D;mongodb
-Error: couldn&#39;t connect to server 127.0.0.1:27017, connection attempt failed: SocketException: Error connecting to 127.0.0.1:27017 :: caused by :: Connection refused :
-connect@src&#x2F;mongo&#x2F;shell&#x2F;mongo.js:372:17
-@(connect):2:6
-exception: connect failed
-exiting with code 1</code></pre>
-<p>运行修复命令, 检查mongod未启动成功原因</p>
-<pre class="language-none"><code class="language-none">sudo mongod --repair</code></pre>
-<p>查看到有以下错误信息:</p>
-<pre class="language-none"><code class="language-none">&#123;&quot;t&quot;:&#123;&quot;$date&quot;:&quot;2022-02-17T10:15:03.397+08:00&quot;&#125;,&quot;s&quot;:&quot;E&quot;,  &quot;c&quot;:&quot;CONTROL&quot;,  &quot;id&quot;:20557,   &quot;ctx&quot;:&quot;initandlisten&quot;,&quot;msg&quot;:&quot;DBException in initAndListen, terminating&quot;,&quot;attr&quot;:&#123;&quot;error&quot;:&quot;NonExistentPath: Data directory &#x2F;data&#x2F;db not found. Create the missing directory or specify another path using (1) the --dbpath command line option, or (2) by adding the &#39;storage.dbPath&#39; option in the configuration file.&quot;&#125;&#125;</code></pre>
-<p>创建/data/db目录得到以下错误提示:</p>
-<pre class="language-none"><code class="language-none">sudo mkdir -p &#x2F;data&#x2F;db
-mkdir: &#x2F;data&#x2F;db: Read-only file system</code></pre>
-<p>因为Mac电脑默认是开启安全模式的，不能在根目录下面随便创建删除文件夹。所以我们采取另一种方案, 修改配置文件中的dbpath</p>
-<pre class="language-none"><code class="language-none">mkdir -p &#x2F;Users&#x2F;wangf&#x2F;data&#x2F;db
-vi &#x2F;usr&#x2F;local&#x2F;etc&#x2F;mongod.conf
-# Store data in &#x2F;usr&#x2F;local&#x2F;var&#x2F;mongodb instead of the default &#x2F;data&#x2F;db
-dbpath &#x3D; &#x2F;Users&#x2F;wangf&#x2F;data&#x2F;db
-# Append logs to &#x2F;usr&#x2F;local&#x2F;var&#x2F;log&#x2F;mongodb&#x2F;mongo.log
-logpath &#x3D; &#x2F;usr&#x2F;local&#x2F;var&#x2F;log&#x2F;mongodb&#x2F;mongo.log
-logappend &#x3D; true
-port &#x3D; 27017
+    # 上传文件至指定数据桶
+    client.fput_object(
+        &quot;asiatrip&quot;, &quot;test1.txt&quot;, &quot;test1.txt&quot;,
+    )
+    print(
+        &quot;数据上传成功&quot;
+    )
+    # 下载文件保存至test2.txt
+    client.fgut_object(
+        &quot;asiatrip&quot;, &quot;test1.txt&quot;, &quot;test2.txt&quot;,
+    )
 
-# Only accept local connections
-#bind_ip &#x3D; 127.0.0.1</code></pre>
-<p>将dbpath修改为/Users/wangf/data/db后重新启动mongod</p>
-<pre class="language-none"><code class="language-none">brew services restart mongodb-community
-Stopping &#96;mongodb-community&#96;... (might take a while)
-&#x3D;&#x3D;&gt; Successfully stopped &#96;mongodb-community&#96; (label: homebrew.mxcl.mongodb-community)
-&#x3D;&#x3D;&gt; Successfully started &#96;mongodb-community&#96; (label: homebrew.mxcl.mongodb-community)</code></pre>
-<p>启动成功, 让我们再来看下mongod进程是否启动成</p>
-<pre class="language-none"><code class="language-none">ps aux | grep -v grep | grep mongod
-wangf            84756   0.3  0.2  5569476  39684   ??  S    10:48AM   0:01.12 &#x2F;usr&#x2F;local&#x2F;opt&#x2F;mongodb-community&#x2F;bin&#x2F;mongod --config &#x2F;usr&#x2F;local&#x2F;etc&#x2F;mongod.conf</code></pre>
-<p>大功告成, 至此Mongodb安装成功!</p>
+
+if __name__ &#x3D;&#x3D; &quot;__main__&quot;:
+    try:
+        main()
+    except S3Error as exc:
+        print(&quot;error occurred.&quot;, exc)</code></pre>
+
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p>TODO 待更新</p>
 
                 
             </div>
@@ -496,7 +507,7 @@ wangf            84756   0.3  0.2  5569476  39684   ??  S    10:48AM   0:01.12 &
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://wf1314.github.io/posts/f428d380-8f98-11ec-9ada-65442556c6db/">https://wf1314.github.io/posts/f428d380-8f98-11ec-9ada-65442556c6db/</a>
+                    <a href="https://wf1314.github.io/posts/11322fc0-947c-11ec-ab6b-636db47239d1/">https://wf1314.github.io/posts/11322fc0-947c-11ec-ab6b-636db47239d1/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -534,8 +545,12 @@ wangf            84756   0.3  0.2  5569476  39684   ??  S    10:48AM   0:01.12 &
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Mongo/">
-                                    <span class="chip bg-color">Mongo</span>
+                                <a href="/tags/Minio/">
+                                    <span class="chip bg-color">Minio</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8/">
+                                    <span class="chip bg-color">对象存储</span>
                                 </a>
                             
                         </div>
@@ -709,9 +724,10 @@ wangf            84756   0.3  0.2  5569476  39684   ??  S    10:48AM   0:01.12 &
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/posts/11322fc0-947c-11ec-ab6b-636db47239d1/">
                     <div class="card-image">
@@ -729,9 +745,9 @@ wangf            84756   0.3  0.2  5569476  39684   ??  S    10:48AM   0:01.12 &
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-02-23
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-23
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -744,6 +760,7 @@ wangf            84756   0.3  0.2  5569476  39684   ??  S    10:48AM   0:01.12 &
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -766,24 +783,24 @@ wangf            84756   0.3  0.2  5569476  39684   ??  S    10:48AM   0:01.12 &
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/posts/35c7b920-8f06-11ec-ade8-474d01fc45a2/">
+                <a href="/posts/f428d380-8f98-11ec-9ada-65442556c6db/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="解决node.js mysql客户端不支持认证协议引发的“ER_NOT_SUPPORTED_AUTH_MODE”问题">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Mac系统安装Mongodb">
                         
-                        <span class="card-title">解决node.js mysql客户端不支持认证协议引发的“ER_NOT_SUPPORTED_AUTH_MODE”问题</span>
+                        <span class="card-title">Mac系统安装Mongodb</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            解决node.js mysql客户端不支持认证协议引发的“ER_NOT_SUPPORTED_AUTH_MODE”问题
+                            记录Mac系统安装Mongodb过程中踩下的坑
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-16
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-17
                             </span>
                         <span class="publish-author">
                             
@@ -800,12 +817,8 @@ wangf            84756   0.3  0.2  5569476  39684   ??  S    10:48AM   0:01.12 &
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Node/">
-                        <span class="chip bg-color">Node</span>
-                    </a>
-                    
-                    <a href="/tags/Mysql/">
-                        <span class="chip bg-color">Mysql</span>
+                    <a href="/tags/Mongo/">
+                        <span class="chip bg-color">Mongo</span>
                     </a>
                     
                 </div>

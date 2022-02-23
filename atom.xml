@@ -6,7 +6,7 @@
   <link href="https://wf1314.github.io/atom.xml" rel="self"/>
   
   <link href="https://wf1314.github.io/"/>
-  <updated>2022-02-17T02:49:36.632Z</updated>
+  <updated>2022-02-23T08:21:52.650Z</updated>
   <id>https://wf1314.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Minio安装及使用教程</title>
+    <link href="https://wf1314.github.io/posts/11322fc0-947c-11ec-ab6b-636db47239d1/"/>
+    <id>https://wf1314.github.io/posts/11322fc0-947c-11ec-ab6b-636db47239d1/</id>
+    <published>2022-02-23T07:41:52.000Z</published>
+    <updated>2022-02-23T08:21:52.650Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h2&gt;&lt;p&gt;最近在做一个AI模型管理后台的项目, 数据集的存储是首先要考虑的问题, 初步制定方案为:前端传递数据集给后端,</summary>
+        
+      
+    
+    
+    
+    <category term="Minio" scheme="https://wf1314.github.io/categories/Minio/"/>
+    
+    
+    <category term="Minio" scheme="https://wf1314.github.io/tags/Minio/"/>
+    
+    <category term="对象存储" scheme="https://wf1314.github.io/tags/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>Mac系统安装Mongodb</title>
