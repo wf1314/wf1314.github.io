@@ -777,7 +777,8 @@ docker run \
   -e &quot;MINIO_ROOT_PASSWORD&#x3D;wJalrXUtnFEMI&#x2F;K7MDENG&#x2F;bPxRfiCYEXAMPLEKEY&quot; \
   quay.io&#x2F;minio&#x2F;minio server &#x2F;data --console-address &quot;:9001&quot;</code></pre>
 
-<h2 id="Python-上传文件至Minio服务端"><a href="#Python-上传文件至Minio服务端" class="headerlink" title="Python 上传文件至Minio服务端"></a>Python 上传文件至Minio服务端</h2><pre class="language-none"><code class="language-none">from minio import Minio
+<h2 id="Python-上传及下载文件"><a href="#Python-上传及下载文件" class="headerlink" title="Python 上传及下载文件"></a>Python 上传及下载文件</h2><h3 id="MinIO-Python-Client-SDK安装"><a href="#MinIO-Python-Client-SDK安装" class="headerlink" title="MinIO Python Client SDK安装"></a>MinIO Python Client SDK安装</h3><pre class="language-none"><code class="language-none">pip install minio  </code></pre>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><pre class="language-none"><code class="language-none">from minio import Minio
 from minio.error import S3Error
 
 
