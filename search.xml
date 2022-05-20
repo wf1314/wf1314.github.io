@@ -883,4 +883,454 @@ Query OK, 0 rows affected (0.12 sec)</code></pre>
         <tag>Mysql</tag>
       </tags>
   </entry>
+  <entry>
+    <title>3proxy代理服务器使用</title>
+    <url>/posts/3474b970-d7da-11ec-8235-6922670bf921/</url>
+    <content><![CDATA[<h2 id="3proxy-简介"><a href="#3proxy-简介" class="headerlink" title="3proxy 简介"></a>3proxy 简介</h2><p>3proxy是一个代理服务器,功能十分强大,可以同时开启http、socks等各种代理,支持 windows 和 linux 平台，安装和配置都很简单,使用非常方便.</p>
+<h2 id="配置安装3proxy"><a href="#配置安装3proxy" class="headerlink" title="配置安装3proxy"></a>配置安装3proxy</h2><h4 id="LINUX-系统"><a href="#LINUX-系统" class="headerlink" title="LINUX 系统"></a>LINUX 系统</h4><p>安装步骤如下：</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell"># 通过 git 下载最新版 3proxy 源码
+git clone https:&#x2F;&#x2F;github.com&#x2F;z3APA3A&#x2F;3proxy.git
+# 切换到 3proxy 目录
+cd 3proxy
+# 编译 3proxy, 如果你的系统没有 gcc，你需求先安装 gcc
+make -f Makefile.Linux
+# 安装 3proxy
+make -f Makefile.Linux install</code></pre>
+<p>编辑配置文件3proxy.cfg,如果没有该文件可以自行创建</p>
+<pre class="language-none"><code class="language-none"># dns服务器第一个解析失败会使用第二个
+nserver 223.5.5.5  
+nserver 114.114.114.114
+# 域名解析最大的缓存条目 默认即可，也可以注释掉
+nscache 65536
+# 各项连接选项的超时时间
+# timeouts &lt;BYTE_SHORT&gt; &lt;BYTE_LONG&gt; &lt;STRING_SHORT&gt; &lt;STRING_LONG&gt; &lt;CONNECTION_SHORT&gt; &lt;CONNECTION_LONG&gt; &lt;DNS&gt; &lt;CHAIN&gt;
+timeouts 1 5 30 60 180 1800 15 60
+# 用户名密码 如果auth为strong情况需要验证
+users zds:CL:a95j1JB3Txvq71D20G88oi
+# auto none 无需验证
+auth strong # 开启验证
+flush
+# 开启一个HTTP代理 端口是9000
+proxy -a -i0.0.0.0 -p9000
+# 开启一个SOCKS代理 端口是9001
+socks -a -i0.0.0.0 -p9001
+</code></pre>
+<p>后台执行</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">3proxy 3proxy.cfg&amp;</code></pre>
+<h4 id="windows-系统"><a href="#windows-系统" class="headerlink" title="windows 系统"></a>windows 系统</h4><p>安装步骤如下:<br>首先<a href="https://github.com/z3APA3A/3proxy/releases">点击下载</a>应用程序<br>安装好之后执行命令:</p>
+<pre class="language-none"><code class="language-none"># 3proxy.cfg路径更改为自己的3proxy.cfg
+3proxy --install c:\service\3proxy\bin\3proxy.cfg
+
+net start 3proxy # 启动服务</code></pre>
+
+<p>可以通过以下代码在本地来检查是否可以正常使用:</p>
+<pre class="language-python" data-language="python"><code class="language-python">import requests
+from requests.auth import HTTPProxyAuth
+
+# 验证
+auth &#x3D; HTTPProxyAuth(&#39;zds&#39;, &#39;a95j1JB3Txvq71D20G88oi&#39;)  # cfg配置文件里设置的账号密码
+
+url &#x3D; &#39;http:&#x2F;&#x2F;ip.6655.com&#x2F;ip.aspx&#39;
+proxies &#x3D; &#123;
+    &#39;http&#39;: &#39;http:&#x2F;&#x2F;**.**.**.**:9000&#39;  # 服务器外网ip
+&#125;
+r &#x3D; requests.get(url, proxies&#x3D;proxies, auth&#x3D;auth)
+
+print(r.text)
+</code></pre>
+<p>如果正确输出你的服务器ip表示开启成功!</p>
+]]></content>
+      <categories>
+        <category>代理</category>
+      </categories>
+      <tags>
+        <tag>代理</tag>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python3 分布式进程</title>
+    <url>/posts/3474b971-d7da-11ec-8235-6922670bf921/</url>
+    <content><![CDATA[<h2 id="分布式进程"><a href="#分布式进程" class="headerlink" title="分布式进程"></a>分布式进程</h2><p>Python的multiprocessing模块不但支持多进程，其中managers子模块还支持把多进程分布到多台机器上。一个服务进程可以作为调度者，将任务分布到其他多个进程中，依靠网络通信。由于managers模块封装很好，不必了解网络通信的细节，就可以很容易地编写分布式多进程程序。</p>
+<h2 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h2><p>如果我们已经有一个通过Queue通信的多进程程序在同一台机器上运行，现在，由于处理任务的进程任务繁重，希望把发送任务的进程和处理任务的进程分布到两台机器上。怎么用分布式进程实现？<br>原有的Queue可以继续使用，但是，通过managers模块把Queue通过网络暴露出去，就可以让其他机器的进程访问Queue了。</p>
+<h2 id="master端-任务发布"><a href="#master端-任务发布" class="headerlink" title="master端(任务发布)"></a>master端(任务发布)</h2><p>我们先看服务进程。服务进程负责启动Queue，把Queue注册到网络上，然后往Queue里面写入任务。</p>
+<pre class="language-python" data-language="python"><code class="language-python"># task_master.py
+
+import random, time, queue
+from multiprocessing.managers import BaseManager
+
+# 发送任务的队列:
+task_queue &#x3D; queue.Queue()
+# 接收结果的队列:
+result_queue &#x3D; queue.Queue()
+
+# 从BaseManager继承的QueueManager:
+class QueueManager(BaseManager):
+    pass
+
+# 把两个Queue都注册到网络上, callable参数关联了Queue对象:
+QueueManager.register(&#39;get_task_queue&#39;, callable&#x3D;lambda: task_queue)
+QueueManager.register(&#39;get_result_queue&#39;, callable&#x3D;lambda: result_queue)
+# 绑定端口5000, 设置验证码&#39;abc&#39;:
+manager &#x3D; QueueManager(address&#x3D;(&#39;&#39;, 5000), authkey&#x3D;b&#39;abc&#39;)
+# 启动Queue:
+manager.start()
+# 获得通过网络访问的Queue对象:
+task &#x3D; manager.get_task_queue()
+result &#x3D; manager.get_result_queue()
+# 放几个任务进去:
+for i in range(10):
+    n &#x3D; random.randint(0, 10000)
+    print(&#39;Put task %d...&#39; % n)
+    task.put(n)
+# 从result队列读取结果:
+print(&#39;Try get results...&#39;)
+for i in range(10):
+    r &#x3D; result.get(timeout&#x3D;10)
+    print(&#39;Result: %s&#39; % r)
+# 关闭:
+manager.shutdown()
+print(&#39;master exit.&#39;)</code></pre>
+
+<p>请注意，当我们在一台机器上写多进程程序时，创建的Queue可以直接拿来用，但是，在分布式多进程环境下，添加任务到Queue不可以直接对原始的task_queue进行操作，那样就绕过了QueueManager的封装，必须通过manager.get_task_queue()获得的Queue接口添加。然后，在另一台机器上启动任务进程（本机上启动也可以）</p>
+<h2 id="worker端-任务执行"><a href="#worker端-任务执行" class="headerlink" title="worker端(任务执行)"></a>worker端(任务执行)</h2><pre class="language-python" data-language="python"><code class="language-python"># task_worker.py
+
+import time, sys, queue
+from multiprocessing.managers import BaseManager
+
+# 创建类似的QueueManager:
+class QueueManager(BaseManager):
+    pass
+
+# 由于这个QueueManager只从网络上获取Queue，所以注册时只提供名字:
+QueueManager.register(&#39;get_task_queue&#39;)
+QueueManager.register(&#39;get_result_queue&#39;)
+
+# 连接到服务器，也就是运行task_master.py的机器:
+server_addr &#x3D; &#39;127.0.0.1&#39;
+print(&#39;Connect to server %s...&#39; % server_addr)
+# 端口和验证码注意保持与task_master.py设置的完全一致:
+m &#x3D; QueueManager(address&#x3D;(server_addr, 5000), authkey&#x3D;b&#39;abc&#39;)
+# 从网络连接:
+m.connect()
+# 获取Queue的对象:
+task &#x3D; m.get_task_queue()
+result &#x3D; m.get_result_queue()
+# 从task队列取任务,并把结果写入result队列:
+for i in range(10):
+    try:
+        n &#x3D; task.get(timeout&#x3D;1)
+        print(&#39;run task %d * %d...&#39; % (n, n))
+        r &#x3D; &#39;%d * %d &#x3D; %d&#39; % (n, n, n*n)
+        time.sleep(1)
+        result.put(r)
+    except Queue.Empty:
+        print(&#39;task queue is empty.&#39;)
+# 处理结束:
+print(&#39;worker exit.&#39;)&#96;&#96;&#96;
+
+任务进程要通过网络连接到服务进程，所以要指定服务进程的IP。
+
+现在，可以试试分布式进程的工作效果了。先启动task_master.py服务进程：
+&#96;&#96;&#96;shell
+$ python3 task_master.py
+Put task 3411...
+Put task 1605...
+Put task 1398...
+Put task 4729...
+Put task 5300...
+Put task 7471...
+Put task 68...
+Put task 4219...
+Put task 339...
+Put task 7866...
+Try get results...</code></pre>
+<p>task_master.py进程发送完任务后，开始等待result队列的结果。现在启动task_worker.py进程：</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">$ python3 task_worker.py
+Connect to server 127.0.0.1...
+run task 3411 * 3411...
+run task 1605 * 1605...
+run task 1398 * 1398...
+run task 4729 * 4729...
+run task 5300 * 5300...
+run task 7471 * 7471...
+run task 68 * 68...
+run task 4219 * 4219...
+run task 339 * 339...
+run task 7866 * 7866...
+worker exit.</code></pre>
+<p>task_worker.py进程结束，在task_master.py进程中会继续打印出结果：</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">Result: 3411 * 3411 &#x3D; 11634921
+Result: 1605 * 1605 &#x3D; 2576025
+Result: 1398 * 1398 &#x3D; 1954404
+Result: 4729 * 4729 &#x3D; 22363441
+Result: 5300 * 5300 &#x3D; 28090000
+Result: 7471 * 7471 &#x3D; 55815841
+Result: 68 * 68 &#x3D; 4624
+Result: 4219 * 4219 &#x3D; 17799961
+Result: 339 * 339 &#x3D; 114921
+Result: 7866 * 7866 &#x3D; 61873956</code></pre>
+<p>这个简单的Master/Worker模型有什么用？其实这就是一个简单但真正的分布式计算，把代码稍加改造，启动多个worker，就可以把任务分布到几台甚至几十台机器上，比如把计算n*n的代码换成发送邮件，就实现了邮件队列的异步发送。</p>
+<p>Queue对象存储在哪？注意到task_worker.py中根本没有创建Queue的代码，所以，Queue对象存储在task_master.py进程中：</p>
+<pre class="language-cs" data-language="cs"><code class="language-cs">┌─────────────────────────────────────────┐     ┌──────────────────────────────────────┐
+│task_master.py                           │  │  │task_worker.py                        │
+│                                         │     │                                      │
+│  task &#x3D; manager.get_task_queue()        │  │  │  task &#x3D; manager.get_task_queue()     │
+│  result &#x3D; manager.get_result_queue()    │     │  result &#x3D; manager.get_result_queue() │
+│              │                          │  │  │              │                       │
+│              │                          │     │              │                       │
+│              ▼                          │  │  │              │                       │
+│  ┌─────────────────────────────────┐    │     │              │                       │
+│  │QueueManager                     │    │  │  │              │                       │
+│  │ ┌────────────┐ ┌──────────────┐ │    │     │              │                       │
+│  │ │ task_queue │ │ result_queue │ │&lt;───┼──┼──┼──────────────┘                       │
+│  │ └────────────┘ └──────────────┘ │    │     │                                      │
+│  └─────────────────────────────────┘    │  │  │                                      │
+└─────────────────────────────────────────┘     └──────────────────────────────────────┘</code></pre>
+<p>而Queue之所以能通过网络访问，就是通过QueueManager实现的。由于QueueManager管理的不止一个Queue，所以，要给每个Queue的网络调用接口起个名字，比如get_task_queue。</p>
+<p>authkey有什么用？这是为了保证两台机器正常通信，不被其他机器恶意干扰。如果task_worker.py的authkey和task_master.py的authkey不一致，肯定连接不上。</p>
+<p>转载自<a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001431929340191970154d52b9d484b88a7b343708fcc60000">廖雪峰的官方网站</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>爬虫</category>
+      </categories>
+      <tags>
+        <tag>多进程</tag>
+        <tag>分布式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>supervisor进程管理使用教程</title>
+    <url>/posts/3474b972-d7da-11ec-8235-6922670bf921/</url>
+    <content><![CDATA[<h2 id="使用-supervisor-管理进程"><a href="#使用-supervisor-管理进程" class="headerlink" title="使用 supervisor 管理进程"></a>使用 supervisor 管理进程</h2><p>Supervisor (<a href="http://supervisord.org/">http://supervisord.org</a>) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启动。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>Supervisor 可以运行在 Linux、Mac OS X 上。如前所述，supervisor 是 Python 编写的，所以安装起来也很方便，可以直接用 pip:</p>
+<pre class="language-none"><code class="language-none">sudo pip install supervisor</code></pre>
+<h3 id="supervisord-配置"><a href="#supervisord-配置" class="headerlink" title="supervisord 配置"></a>supervisord 配置</h3><p>Supervisor 相当强大，提供了很丰富的功能，不过我们可能只需要用到其中一小部分。安装完成之后，可以编写配置文件，来满足自己的需求。为了方便，我们把配置分成两部分：supervisord（supervisor 是一个 C/S 模型的程序，这是 server 端，对应的有 client 端：supervisorctl）和应用程序（即我们要管理的程序）。</p>
+<p>首先来看 supervisord 的配置文件。安装完 supervisor 之后，可以运行echo_supervisord_conf 命令输出默认的配置项，也可以重定向到一个配置文件里：</p>
+<pre class="language-none"><code class="language-none">echo_supervisord_conf &gt; &#x2F;etc&#x2F;supervisord.conf</code></pre>
+<p>去除里面大部分注释和“不相关”的部分，我们可以先看这些配置:</p>
+<pre class="language-none"><code class="language-none">[unix_http_server]
+file&#x3D;&#x2F;tmp&#x2F;supervisor.sock   ; UNIX socket 文件，supervisorctl 会使用
+;chmod&#x3D;0700                 ; socket 文件的 mode，默认是 0700
+;chown&#x3D;nobody:nogroup       ; socket 文件的 owner，格式： uid:gid
+
+;[inet_http_server]         ; HTTP 服务器，提供 web 管理界面
+;port&#x3D;127.0.0.1:9001        ; Web 管理后台运行的 IP 和端口，如果开放到公网，需要注意安全性
+;username&#x3D;user              ; 登录管理后台的用户名
+;password&#x3D;123               ; 登录管理后台的密码
+
+[supervisord]
+logfile&#x3D;&#x2F;tmp&#x2F;supervisord.log ; 日志文件，默认是 $CWD&#x2F;supervisord.log
+logfile_maxbytes&#x3D;50MB        ; 日志文件大小，超出会 rotate，默认 50MB
+logfile_backups&#x3D;10           ; 日志文件保留备份数量默认 10
+loglevel&#x3D;info                ; 日志级别，默认 info，其它: debug,warn,trace
+pidfile&#x3D;&#x2F;tmp&#x2F;supervisord.pid ; pid 文件
+nodaemon&#x3D;false               ; 是否在前台启动，默认是 false，即以 daemon 的方式启动
+minfds&#x3D;1024                  ; 可以打开的文件描述符的最小值，默认 1024
+minprocs&#x3D;200                 ; 可以打开的进程数的最小值，默认 200
+
+; the below section must remain in the config file for RPC
+; (supervisorctl&#x2F;web interface) to work, additional interfaces may be
+; added by defining them in separate rpcinterface: sections
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory &#x3D; supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl&#x3D;unix:&#x2F;&#x2F;&#x2F;tmp&#x2F;supervisor.sock ; 通过 UNIX socket 连接 supervisord，路径与 unix_http_server 部分的 file 一致
+;serverurl&#x3D;http:&#x2F;&#x2F;127.0.0.1:9001 ; 通过 HTTP 的方式连接 supervisord
+
+; 包含其他的配置文件
+[include]
+files &#x3D; relative&#x2F;directory&#x2F;*.ini    ; 可以是 *.conf 或 *.ini
+我们把上面这部分配置保存到 &#x2F;etc&#x2F;supervisord.conf（或其他任意有权限访问的文件），然后启动 supervisord（通过 -c 选项指定配置文件路径，如果不指定会按照这个顺序查找配置文件：$CWD&#x2F;supervisord.conf, $CWD&#x2F;etc&#x2F;supervisord.conf, &#x2F;etc&#x2F;supervisord.conf）：</code></pre>
+<p>我们把上面这部分配置保存到 /etc/supervisord.conf（或其他任意有权限访问的文件），然后启动 supervisord（通过 -c 选项指定配置文件路径，如果不指定会按照这个顺序查找配置文件：$CWD/supervisord.conf, $CWD/etc/supervisord.conf, /etc/supervisord.conf）：</p>
+<pre class="language-none"><code class="language-none">supervisord -c &#x2F;etc&#x2F;supervisord.conf</code></pre>
+<p>查看 supervisord 是否在运行：</p>
+<pre class="language-none"><code class="language-none">ps aux | grep supervisord</code></pre>
+<h3 id="program-配置"><a href="#program-配置" class="headerlink" title="program 配置"></a>program 配置</h3><p>上面我们已经把 supervisrod 运行起来了，现在可以添加我们要管理的进程的配置文件。这些配置可以都写到 supervisord.conf 文件里，如果应用程序很多，最好通过 include 的方式把不同的程序（组）写到不同的配置文件里。</p>
+<p>为了举例，我们新建一个目录 /etc/supervisor/ 用于存放这些配置文件，相应的，把 /etc/supervisord.conf 里 include 部分的的配置修改一下：</p>
+<pre class="language-none"><code class="language-none">[include]
+files &#x3D; &#x2F;etc&#x2F;supervisor&#x2F;*.conf</code></pre>
+<p>假设有个用 Flask 开发的用户系统 usercenter, 生产环境使用 gunicorn 运行。项目代码位于 /home/leon/projects/usercenter，WSGI 对象位于 wsgi.py。在命令行启动的方式是这样的：</p>
+<pre class="language-none"><code class="language-none">cd &#x2F;home&#x2F;leon&#x2F;projects&#x2F;usercenter
+gunicorn -w 8 -b 0.0.0.0:17510 wsgi:app</code></pre>
+<p>对应的配置文件可能是：</p>
+<pre class="language-none"><code class="language-none">[program:usercenter]
+directory &#x3D; &#x2F;home&#x2F;leon&#x2F;projects&#x2F;usercenter ; 程序的启动目录
+command &#x3D; gunicorn -w 8 -b 0.0.0.0:17510 wsgi:app  ; 启动命令
+autostart &#x3D; true     ; 在 supervisord 启动的时候也自动启动
+startsecs &#x3D; 5        ; 启动 5 秒后没有异常退出，就当作已经正常启动了
+autorestart &#x3D; true   ; 程序异常退出后自动重启
+startretries &#x3D; 3     ; 启动失败自动重试次数，默认是 3
+user &#x3D; leon          ; 用哪个用户启动
+redirect_stderr &#x3D; true  ; 把 stderr 重定向到 stdout，默认 false
+stdout_logfile_maxbytes &#x3D; 20MB  ; stdout 日志文件大小，默认 50MB
+stdout_logfile_backups &#x3D; 20     ; stdout 日志文件备份数
+; stdout 日志文件，需要注意当指定目录不存在时无法正常启动，所以需要手动创建目录（supervisord 会自动创建日志文件）
+stdout_logfile &#x3D; &#x2F;data&#x2F;logs&#x2F;usercenter_stdout.log</code></pre>
+<p>其中 [program:usercenter] 中的 usercenter 是应用程序的唯一标识，不能重复。对该程序的所有操作（start, restart 等）都通过名字来实现。</p>
+<h3 id="Tips-1-Python-环境"><a href="#Tips-1-Python-环境" class="headerlink" title="Tips 1: Python 环境"></a>Tips 1: Python 环境</h3><p>有两种方式指定程序使用的 Python 环境：</p>
+<ul>
+<li><p>command 使用绝对路径。假设使用 pyenv 来管理 Python 环境，上面例子中的 gunicorn 路径可以替换为/home/leon/.pyenv/versions/usercenter/bin/gunicorn. 这种方式一目了然，推荐。</p>
+</li>
+<li><p>通过 environment 配置 PYTHONPATH. environment=PYTHONPATH=$PYTHONPATH:/home/leon/.pyenv/versions/usercenter/bin/. environment 这个配置项非常有用，可以用来给程序传入环境变量。</p>
+</li>
+</ul>
+<h3 id="Tips-2-后台进程"><a href="#Tips-2-后台进程" class="headerlink" title="Tips 2: 后台进程"></a>Tips 2: 后台进程</h3><p>Supervisor 只能管理在前台运行的程序，所以如果应用程序有后台运行的选项，需要关闭。</p>
+<h3 id="Tips-3-子进程"><a href="#Tips-3-子进程" class="headerlink" title="Tips 3: 子进程"></a>Tips 3: 子进程</h3><p>有时候用 Supervisor 托管的程序还会有子进程（如 Tornado），如果只杀死主进程，子进程就可能变成孤儿进程。通过这两项配置来确保所有子进程都能正确停止：</p>
+<pre class="language-none"><code class="language-none">stopasgroup&#x3D;true
+killasgroup&#x3D;true</code></pre>
+
+<h3 id="使用-supervisorctl"><a href="#使用-supervisorctl" class="headerlink" title="使用 supervisorctl"></a>使用 supervisorctl</h3><p>Supervisorctl 是 supervisord 的一个命令行客户端工具，启动时需要指定与 supervisord 使用同一份配置文件，否则与 supervisord 一样按照顺序查找配置文件。</p>
+<pre class="language-none"><code class="language-none">supervisorctl -c &#x2F;etc&#x2F;supervisord.conf</code></pre>
+<p>上面这个命令会进入 supervisorctl 的 shell 界面，然后可以执行不同的命令了：</p>
+<pre class="language-none"><code class="language-none">&gt; status    # 查看程序状态
+&gt; stop usercenter   # 关闭 usercenter 程序
+&gt; start usercenter  # 启动 usercenter 程序
+&gt; restart usercenter    # 重启 usercenter 程序
+&gt; reread    ＃ 读取有更新（增加）的配置文件，不会启动新添加的程序
+&gt; update    ＃ 重启配置文件修改过的程序</code></pre>
+<p>上面这些命令都有相应的输出，除了进入 supervisorctl 的 shell 界面，也可以直接在 bash 终端运行：</p>
+<pre class="language-none"><code class="language-none">$ supervisorctl status
+$ supervisorctl stop usercenter
+$ supervisorctl start usercenter
+$ supervisorctl restart usercenter
+$ supervisorctl reread
+$ supervisorctl update</code></pre>
+<h3 id="使用web可视化管理"><a href="#使用web可视化管理" class="headerlink" title="使用web可视化管理"></a>使用web可视化管理</h3><p>除了 supervisorctl 之外，还可以配置 supervisrod 启动 web 管理界面，这个 web 后台使用 Basic Auth 的方式进行身份认证。</p>
+<pre class="language-none"><code class="language-none">[inet_http_server]         ; HTTP 服务器，提供 web 管理界面
+port&#x3D;0.0.0.0:9001        ; Web 管理后台运行的 IP 和端口，如果开放到公网，需要注意安全性
+username&#x3D;user              ; 登录管理后台的用户名
+password&#x3D;123               ; 登录管理后台的密码</code></pre>
+<p>更改主配置文件的[inet_http_server]后重新运行,通过web端访问9001端口输入账号密码后会进入如下界面:<br><img src="http://i1.bvimg.com/675051/d5285f82fd3f7e20.png" alt="Markdown"><br>可通过此界面对进程进行终止重启等操作</p>
+<h3 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h3><p>当你要管理的子进程非常多时，Supervisor允许你将子进程分组，也就是多个子进程可以在同一组内统一管理。你只需要配置”[group:thegroupname]”块就行了。</p>
+<p>我们可以试下，配置一个”[program:hello]”子程序，和”[program:world]”,然后加上”[group:xxx]”配置：</p>
+<pre class="language-none"><code class="language-none">[program:hello]
+command&#x3D;python hello.py
+
+[program:world]
+command&#x3D;python world.py
+
+[group:helloworld]
+programs&#x3D;hello,world</code></pre>
+<p>现在我们将子进程”hello”和”world”都配置在进程组”helloworld”中，启动supervisord，让我们在supervisorctl客户端下试一试：</p>
+<pre class="language-none"><code class="language-none">supervisorctl -c &#x2F;etc&#x2F;supervisord.conf
+supervisor&gt; status helloworld:*
+helloworld:hello                     RUNNING   pid 75042, uptime 0:03:12
+helloworld:world                   RUNNING   pid 75043, uptime 0:03:12
+supervisor&gt; stop helloworld:*
+helloworld:hello: stopped
+helloworld:world: stopped
+supervisor&gt; status helloworld:*
+helloworld:hello                    STOPPED   Nov 27 11:05 PM
+helloworld:world                   STOPPED   Nov 27 11:05 PM</code></pre>
+<p>子进程名前都加了前缀”helloworld:”，这样我们使用通配符”appgroup:*”来执行的命令就对进程组内所有的子进程起效了.</p>
+<h3 id="开机自启动"><a href="#开机自启动" class="headerlink" title="开机自启动"></a>开机自启动</h3><h4 id="ubuntu系统"><a href="#ubuntu系统" class="headerlink" title="ubuntu系统"></a>ubuntu系统</h4><p>编辑/etc/rc.local文件</p>
+<pre class="language-none"><code class="language-none">vi &#x2F;etc&#x2F;rc.local</code></pre>
+<p>在exit 0 之前加入以下命令</p>
+<pre class="language-none"><code class="language-none">&#x2F;usr&#x2F;local&#x2F;bin&#x2F;supervisord</code></pre>
+<p>保存并退出。<br>最后修改rc.local权限</p>
+<pre class="language-none"><code class="language-none">chmod +x &#x2F;etc&#x2F;rc.local</code></pre>
+
+<h4 id="centos系统"><a href="#centos系统" class="headerlink" title="centos系统"></a>centos系统</h4><p>新建文件supervisord.service</p>
+<pre class="language-none"><code class="language-none">#supervisord.service
+
+[Unit]
+Description&#x3D;Supervisor daemon
+
+[Service]
+Type&#x3D;forking
+ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;supervisord -c &#x2F;etc&#x2F;supervisord.conf
+ExecStop&#x3D;&#x2F;usr&#x2F;bin&#x2F;supervisorctl shutdown
+ExecReload&#x3D;&#x2F;usr&#x2F;bin&#x2F;supervisorctl reload
+KillMode&#x3D;process
+Restart&#x3D;on-failure
+RestartSec&#x3D;42s
+
+[Install]
+WantedBy&#x3D;multi-user.target</code></pre>
+<p>将文件拷贝到/usr/lib/systemd/system/</p>
+<pre class="language-none"><code class="language-none">cp supervisord.service &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;</code></pre>
+<p>启动服务</p>
+<pre class="language-none"><code class="language-none">systemctl enable supervisord</code></pre>
+<p>验证一下是否为开机启动</p>
+<pre class="language-none"><code class="language-none">systemctl is-enabled supervisord</code></pre>
+<h4 id="MacOs系统"><a href="#MacOs系统" class="headerlink" title="MacOs系统"></a>MacOs系统</h4><p>我们可以通过编写launched配置文件让supervisor开机自启，我们需要编辑/Library/LaunchDaemons/com.agendaless.supervisord.plist文件（需要root权限，如sudo）：</p>
+<pre class="language-none"><code class="language-none">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-&#x2F;&#x2F;Apple&#x2F;&#x2F;DTD PLIST 1.0&#x2F;&#x2F;EN&quot; &quot;http:&#x2F;&#x2F;www.apple.com&#x2F;DTDs&#x2F;PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version&#x3D;&quot;1.0&quot;&gt;
+&lt;dict&gt;
+    &lt;key&gt;KeepAlive&lt;&#x2F;key&gt;
+    &lt;dict&gt;
+        &lt;key&gt;SuccessfulExit&lt;&#x2F;key&gt;
+        &lt;false&#x2F;&gt;
+    &lt;&#x2F;dict&gt;
+    &lt;key&gt;Label&lt;&#x2F;key&gt;
+    &lt;string&gt;com.agendaless.supervisord&lt;&#x2F;string&gt;
+    &lt;key&gt;ProgramArguments&lt;&#x2F;key&gt;
+    &lt;array&gt;
+        &lt;string&gt;&#x2F;usr&#x2F;local&#x2F;bin&#x2F;supervisord&lt;&#x2F;string&gt;
+        &lt;string&gt;-n&lt;&#x2F;string&gt;
+        &lt;string&gt;-c&lt;&#x2F;string&gt;
+        &lt;string&gt;&#x2F;etc&#x2F;supervisord.conf&lt;&#x2F;string&gt;
+    &lt;&#x2F;array&gt;
+    &lt;key&gt;RunAtLoad&lt;&#x2F;key&gt;
+    &lt;true&#x2F;&gt;
+&lt;&#x2F;dict&gt;
+&lt;&#x2F;plist&gt;</code></pre>
+<p>其中配置文件的位置可以根据情况改变（例子里是/etc/supervisord.conf）<br>接着我们就可以注册这个plist了：</p>
+<pre class="language-none"><code class="language-none">launchctl load &#x2F;Library&#x2F;LaunchDaemons&#x2F;com.agendaless.supervisord.plist</code></pre>
+<p>如果一切正常，那么我们运行supervisorctl就可以看到正确的结果了：</p>
+<pre class="language-none"><code class="language-none">&gt; sudo supervisorctl
+supervisor&gt;</code></pre>
+
+<h2 id="遇到的问题1"><a href="#遇到的问题1" class="headerlink" title="遇到的问题1"></a>遇到的问题1</h2><pre class="language-none"><code class="language-none">unix:&#x2F;&#x2F;&#x2F;tmp&#x2F;supervisor.sock no such file</code></pre>
+<p>解决方案如下:<br>1、打开配置文件</p>
+<pre class="language-none"><code class="language-none">vim &#x2F;etc&#x2F;supervisord.conf</code></pre>
+<p>这里把所有的/tmp路径改掉，/tmp/supervisor.sock 改成 /var/run/supervisor.sock，/tmp/supervisord.log 改成 /var/log/supervisor.log，/tmp/supervisord.pid 改成 /var/run/supervisor.pid 要不容易被linux自动清掉<br>2、修改权限</p>
+<pre class="language-none"><code class="language-none">sudo chmod 777 &#x2F;run
+sudo chmod 777 &#x2F;var&#x2F;log</code></pre>
+<p>3、创建supervisor.sock</p>
+<pre class="language-none"><code class="language-none">sudo touch &#x2F;var&#x2F;run&#x2F;supervisor.sock
+sudo chmod 777 &#x2F;var&#x2F;run&#x2F;supervisor.sock</code></pre>
+<p>4、启动supervisord(可能需要等待短暂的时间过后才可以成功启动)注意stop之前的实例或杀死进程</p>
+<h2 id="遇到的问题2"><a href="#遇到的问题2" class="headerlink" title="遇到的问题2"></a>遇到的问题2</h2><pre class="language-none"><code class="language-none">Error: Another program is already listening on a port that one of our HTTP servers is configured to use.  Shut this program down first before starting supervisord.</code></pre>
+<p>解决方案:</p>
+<pre class="language-none"><code class="language-none">sudo unlink &#x2F;tmp&#x2F;supervisor.sock
+
+sudo unlink &#x2F;var&#x2F;run&#x2F;supervisor.sock</code></pre>
+
+<p>Supervisor 有很丰富的功能，还有其他很多项配置，可以在官方文档获取更多信息：<a href="http://supervisord.org/index.html">http://supervisord.org/index.html</a></p>
+<p>本文参考自<a href="http://liyangliang.me/posts/2015/06/using-supervisor/">liyangliang.me</a>,并对其文章进行补充~</p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>绑定gihub page到Godaddy域名</title>
+    <url>/posts/3474b973-d7da-11ec-8235-6922670bf921/</url>
+    <content><![CDATA[<h3 id="一、首先在Godaddy官网购买域名"><a href="#一、首先在Godaddy官网购买域名" class="headerlink" title="一、首先在Godaddy官网购买域名"></a>一、首先在<a href="https://sg.godaddy.com/zh/">Godaddy官网</a>购买域名</h3><h3 id="二、使用dnspod配置DNS"><a href="#二、使用dnspod配置DNS" class="headerlink" title="二、使用dnspod配置DNS"></a>二、使用<a href="https://www.dnspod.cn/">dnspod</a>配置DNS</h3><p>首先，进入DNSPOD官方网站，用你的账号登录。<br>登录后，进入DNSPOD控制面板，选择“我的域名”模块。在“我的域名”页面，有一个【添加域名】按钮。如图片一所示。<br>点击该按钮，这时比如我要解析hgaga.com ，直接输入你想解析的域名进去。（注意，输入域名时，不要带www）。如图片所示。<br>点击【确定】，这样就添加了一个域名到DNSPOD了。<br><img src="http://i1.fuimg.com/675051/fb96508e159bd218.png" alt="Markdown"><br>添加好之后，需要为域名设置各种参数，如A记录，NS地址等。<br>点击刚才添加的这个域名，进入域名设置界面。在这里，你可以看到DNSPOD已经为你提供了2个NS（Name Server）地址，<br>你需要把这2个地址，在GoDaddy后台控制面板中进行设置如图片所示<br><img src="http://i1.fuimg.com/675051/09ea7ead1ab83d1f.png" alt="Markdown"><br><img src="http://i1.fuimg.com/675051/6584f4e29833bab9.png" alt="Markdown"><br>更改完域名服务器后回到dnspod的管理界面,添加一下两条记录<br>alla.ns.cloudflare.com  evan.ns.cloudflare.com<br>|    主机记录   | 记录类型     | 记录值 |<br>| ———    | —      |–     |<br>| www |  CNAME| username.github.io|<br>| @ |  A| 185.199.111.153 |<br>| @ |  A| 185.199.110.153 |</p>
+<p>这样别人用www和不用www都能访问你的网站（其实www的方式，会先解析成<a href="http://xxxx.github.io,/">http://xxxx.github.io，</a> 然后根据CNAME再变成<a href="http://xxx.com,/">http://xxx.com，</a> 即中间是经过一次转换的）。</p>
+<h3 id="三、配置Github"><a href="#三、配置Github" class="headerlink" title="三、配置Github"></a>三、配置<a href="https://github.com/">Github</a></h3><p>在我们的Hexo项目的sources目录下新建个CNAME文件，里面写上我们的域名。<br>之后重新部署项目:</p>
+<pre><code>hexo g
+hexo d
+</code></pre>
+<p>如果你是用 hexo 框架搭建博客并部署到 Github Pages 上:</p>
+<p>每次hexo g hexo d 后会把你的博客所在目录下 public 文件夹里的东西都推到 Github Pages 仓库上，并且把 CNAME 文件覆盖掉，解决这个问题可以直接把 CNAME 文件添加到 source 文件夹里，这样每次推的时候就不用担心仓库里的 CNAME 文件被覆盖掉了。</p>
+<h3 id="开启HTTPS"><a href="#开启HTTPS" class="headerlink" title="开启HTTPS"></a>开启HTTPS</h3><p>点击setting<br><img src="http://i1.fuimg.com/675051/94ebcefd7c8ab3ee.png" alt="Markdown"><br>填写custom domain并勾选enforce https<br><img src="http://i1.fuimg.com/675051/233083cd23f46b45.png" alt="Markdown"></p>
+<p>全部设置完成后,需要等待10分钟左右域名才会生效.</p>
+]]></content>
+      <categories>
+        <category>技术相关</category>
+      </categories>
+      <tags>
+        <tag>域名绑定</tag>
+        <tag>godaddy</tag>
+      </tags>
+  </entry>
 </search>
